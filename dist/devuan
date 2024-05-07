@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Devuan"
+HOMEPAGE="https://www.devuan.org/"
+INFO="Devuan|Debian|-|https://www.devuan.org/|Fork of Debian without systemd that allows users to reclaim control over their system by avoiding unnecessary entanglements and ensuring Init Freedom."
+
+function dist_releases() {
+    echo daedalus chimaera beowulf
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL="https://files.devuan.org/devuan_${RELEASE}/desktop-live"
+    local VER=""
+    case ${RELEASE} in
+      beowulf)  VER="3.1.1";;
+      chimaera) VER="4.0.3";;
+      daedalus) VER="5.0.0";;
+    esac
+    ISO="devuan_${RELEASE}_${VER}_amd64_desktop-live.iso"
+    HASH=$(web_pipe "${URL}/SHASUMS.txt" | grep "${ISO}" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

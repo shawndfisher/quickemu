@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Cachyos"
+HOMEPAGE="https://cachyos.org/"
+INFO="CachyOS|Arch|-|https://cachyos.org/|Designed to deliver lightning-fast speeds and stability, ensuring a smooth and enjoyable computing experience every time you use it."
+
+function dist_releases() {
+    echo latest
+}
+
+function dist_editions() {
+    echo $(web_pipe "https://mirror.cachyos.org/ISO/" | grep "title=" | grep -v testing | grep -v cli | cut -d'"' -f4 | cut -d '/' -f1 | sort)
+}
+
+function dist_image() {
+    local URL="https://mirror.cachyos.org/ISO/${EDITION}/"
+    local REL=$(web_pipe "${URL}" | grep -Po '(?<=">)[0-9]+(?=/</a>)' | sort -ru | tail -n 1)
+    local ISO="cachyos-${EDITION}-linux-${REL}.iso"
+    local HASH=$(web_pipe "${URL}/${REL}/${ISO}.sha256" | cut_1)
+    echo "${URL}/${REL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="PrimTux"
+HOMEPAGE="https://primtux.fr/"
+INFO="PrimTux|Ubuntu|-|https://primtux.fr/|A complete and customizable GNU/Linux operating system intended for primary school students and suitable even for older hardware."
+
+function dist_releases() {
+    echo 7
+}
+
+function dist_editions() {
+    echo 2022-10
+}
+
+function dist_image() {
+    local HASH=""
+    local URL=""
+    local ISO=""
+    ISO="PrimTux${RELEASE}-amd64-${EDITION}.iso"
+    URL="https://sourceforge.net/projects/primtux/files/Distribution"
+    HASH=$(web_pipe "${URL}/${ISO}.md5" | grep "${ISO}" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

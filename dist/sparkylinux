@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Spiral"
+HOMEPAGE="https://spirallinux.github.io/"
+INFO="SparkyLinux|Debian|-|https://sparkylinux.org/|Fast, lightweight and fully customizable operating system which offers several versions for different use cases."
+
+function dist_releases() {
+    echo $(web_pipe "https://sparkylinux.org/download/stable/" | grep "ISO image" | cut -d'-' -f3 | sort -ru)
+}
+
+function dist_editions() {
+    echo $(web_pipe "https://sparkylinux.org/download/stable/" | grep "ISO image" | cut -d'-' -f5 | cut -d'.' -f 1 | sort -u)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL=""
+    ISO="sparkylinux-${RELEASE}-x86_64-${EDITION}.iso"
+    case ${EDITION} in
+      minimalcli) URL="https://sourceforge.net/projects/sparkylinux/files/cli";;
+      minimalgui) URL="https://sourceforge.net/projects/sparkylinux/files/base";;
+      *) URL="https://sourceforge.net/projects/sparkylinux/files/${EDITION}";;
+    esac
+    HASH=$(web_pipe "${URL}/${ISO}.allsums.txt" | head -2 | grep 'iso' | cut_1)
+    echo "${URL}/${ISO}" "${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

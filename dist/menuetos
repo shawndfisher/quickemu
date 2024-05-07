@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="MenuetOS"
+HOMEPAGE="https://menuetos.net/"
+
+GUEST="menuetos"
+
+function dist_releases() {
+    echo latest
+}
+
+function dist_image() {
+    local FILEID="1bMdLL9PVcS_pw8xPf1CfexrTI04hGnZi"
+    local URL="https://drive.usercontent.google.com/download?id=${FILEID}&confirm=xxx"
+    local ISO="M64CD15060.zip"
+    local HASH="3088df5f974220658ea77cab8a265a12cf976f6497c33648877f7f89827ff95a"
+
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+function dist_image_handle() {
+    unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
+    ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.zip')
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

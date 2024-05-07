@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="XeroLinux"
+HOMEPAGE="https://xerolinux.xyz/"
+
+STATUS="bad url"
+
+function dist_releases() {
+   echo kde
+}
+
+function dist_image() {
+    local HASH=$(wget -q -O- "${URL}/${ISO}.sha256" | cut -d' ' -f1)
+    local URL="https://sourceforge.net/projects/xerolinux/files/Releases"
+    local ISO="xerolinux-2022.12-x86_64.iso"
+
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

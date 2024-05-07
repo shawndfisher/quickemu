@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Zorin OS"
+HOMEPAGE="https://zorin.com/os/"
+INFO="Zorin OS|Ubuntu|-|https://zorin.com/os/|Alternative to Windows and macOS designed to make your computer faster, more powerful, secure, and privacy-respecting."
+
+function dist_releases() {
+   echo 17 16
+}
+
+function dist_editions() {
+   echo core64 lite64 education64 edulite64
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL=""
+    # Process the URL redirections; required for Zorin
+    URL=$(web_redirect "https://zrn.co/${RELEASE}${EDITION}")
+    echo "${URL} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+   case  ${EDITION} in
+      education64|edulite64)
+         echo "disk_size=\"32G\"" >> "${CONF_FILE}";;
+   esac
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

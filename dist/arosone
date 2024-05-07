@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="AROS One"
+HOMEPAGE="https://sites.google.com/view/arosone/arosone"
+INFO="AROS One|AROS|-|https://sites.google.com/view/arosone/arosoneo| x86 distribution which is based on Deadwood's ABI v0 release. Additionally there's a preview of a 68k version."
+
+GUEST="arosone"
+
+function dist_releases() {
+    echo $(wget -q -O- "https://sites.google.com/view/arosone/arosone" | grep -Po "AROS One ABIv0 v\K[0-9.]+")
+}
+
+function dist_image() {
+    # local TMPURL="https://sites.google.com/view/arosone/arosone"
+    # FILEID=$(wget -q -O- "${TMPURL}" | grep -Po "(?<=href=\"https://drive.google.com/file/d/)[^/]+(?=/)" | head -1)
+    local FILEID="1K7P5eEnm8-cG5ADHita12cdrkc6x9WIb"
+    URL="https://drive.usercontent.google.com/download?id=${FILEID}&confirm=xxx"
+    ISO="ArosOne-x86-v${RELEASE}-ISO-DVD.zip"
+    HASH=""
+
+    echo "${URL}/${ISO}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+function dist_image_handle() {
+    unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
+    ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.zip')
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

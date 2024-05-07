@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="GhostBSD"
+HOMEPAGE="https://www.ghostbsd.org"
+INFO="GhostBSD|FreeBSD|-|https://www.ghostbsd.org/|Simple, elegant desktop BSD Operating System."
+
+GUEST="freebsd"
+
+function dist_releases() {
+    echo $(web_pipe "https://download.ghostbsd.org/releases/amd64/" | grep "href" | cut -d'"' -f2 | cut -d'/' -f1 | sort -r | tail +3 | head -3)
+}
+
+function dist_editions() {
+    echo mate xfce
+}
+
+function dist_image() {
+    local ISO=""
+    local URL="https://download.ghostbsd.org/releases/amd64/${RELEASE}"
+    local HASH=""
+    case ${EDITION} in
+        mate) ISO="GhostBSD-${RELEASE}.iso";;
+        xfce) ISO="GhostBSD-${RELEASE}-XFCE.iso";;
+    esac
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | grep "${ISO}" | cut -d' ' -f4)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

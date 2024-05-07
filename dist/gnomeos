@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="GNOME OS"
+HOMEPAGE="https://os.gnome.org/"
+INFO="GNOME OS|Independent|-|https://os.gnome.org/|Alpha nightly bleeding edge distro of GNOME"
+
+function releases_gnomeos() {
+    echo "nightly" $(web_pipe "https://download.gnome.org/gnomeos/" | grep -o -P '(?<=<a href=").*(?=/" title=")' | sort -nr)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="gnome_os_installer_${RELEASE}.iso"
+    local URL="https://download.gnome.org/gnomeos/${RELEASE}"
+    case ${RELEASE} in
+        nightly)
+            ISO="gnome_os_installer.iso"
+            URL="https://os.gnome.org/download/latest";;
+        46.0) ISO="gnome_os_installer_46.iso";;
+        3*) ISO="gnome_os_installer.iso";;
+    esac
+    # Process the URL redirections; required for GNOME
+    ISO=$(web_redirect "${URL}/${ISO}")
+    echo "${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

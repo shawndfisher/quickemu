@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Chimera Linux"
+HOMEPAGE="https://chimera-linux.org/"
+INFO="Chimera Linux|Independent|anon:chimera root:chimera|https://chimera-linux.org/|Modern, general-purpose non-GNU Linux distribution."
+
+function dist_releases() {
+    echo latest
+}
+
+function dist_editions() {
+    echo base gnome
+}
+
+function dist_image() {
+    local URL="https://repo.chimera-linux.org/live/${RELEASE}"
+    local DATE=$(web_pipe "${URL}/sha256sums.txt" | head -n1 | cut -d'-' -f5)
+    local ISO="chimera-linux-x86_64-LIVE-${DATE}-${EDITION}.iso"
+    local HASH=$(web_pipe "${URL}/sha256sums.txt" | grep 'x86_64-LIVE' | grep "${EDITION}" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

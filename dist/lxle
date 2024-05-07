@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="LXLE"
+HOMEPAGE="https://lxle.net/"
+
+function dist_releases() {
+    echo focal
+}
+
+function dist_image() {
+    local HASH=""
+    local URL="https://sourceforge.net/projects/lxle/files/Final/OS/${RELEASE^}-64"
+    local ISO="LXLE-${RELEASE^}-Release.iso"
+    
+    HASH="$(wget -q -O- "${URL}/${ISO}.md5" | cut -d' ' -f1)"
+
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

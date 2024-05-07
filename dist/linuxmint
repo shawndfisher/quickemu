@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Linux Mint"
+HOMEPAGE="https://www.linuxmint.com/"
+INFO="Linux Mint|Debian,Ubuntu|-|https://linuxmint.com/|Designed to work out of the box and comes fully equipped with the apps most people need."
+
+function dist_releases() {
+    echo 21.2 21.1 21 20.3 20.2
+}
+
+function dist_editions() {
+    echo cinnamon mate xfce
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="linuxmint-${RELEASE}-${EDITION}-64bit.iso"
+    local URL="https://mirror.bytemark.co.uk/linuxmint/stable/${RELEASE}"
+    HASH=$(web_pipe "${URL}/sha256sum.txt" | grep "${ISO}" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

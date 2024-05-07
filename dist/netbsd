@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="NetBSD"
+HOMEPAGE="https://www.netbsd.org"
+INFO="NetBSD|Independent|-|https://www.netbsd.org/|Free, fast, secure, and highly portable Unix-like Open Source operating system. It is available for a wide range of platforms, from large-scale servers and powerful desktop systems to handheld and embedded devices."
+
+GUEST="netbsd"
+
+function dist_releases() {
+    # V8 is EOL so filter it out
+    echo $(web_pipe "http://cdn.netbsd.org/pub/NetBSD/iso/" | grep -o -E '"[[:digit:]]+\.[[:digit:]]+/"' | tr -d '"/' | grep -v ^8 | sort -nr)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="NetBSD-${RELEASE}-amd64.iso"
+    local URL="https://cdn.netbsd.org/pub/NetBSD/NetBSD-${RELEASE}/images"
+    HASH=$(web_pipe "${URL}/MD5" | grep "${ISO}" | cut -d' ' -f4)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

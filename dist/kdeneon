@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="KDE Neon"
+HOMEPAGE="https://neon.kde.org/"
+INFO="KDE Neon|Debian,Ubuntu|-|https://neon.kde.org/|Latest and greatest of KDE community software packaged on a rock-solid base."
+
+function dist_releases() {
+    echo user testing unstable developer
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL="https://files.kde.org/neon/images/${RELEASE}/current"
+    ISO=$(web_pipe "${URL}/neon-${RELEASE}-current.sha256sum" | cut -d' ' -f3-)
+    HASH=$(web_pipe "${URL}/neon-${RELEASE}-current.sha256sum" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Bazzite"
+HOMEPAGE="https://github.com/ublue-os/bazzite/"
+INFO="Bazzite|Fedora,SteamOS|-|https://github.com/ublue-os/bazzite/|Container native gaming and a ready-to-game SteamOS like."
+
+function dist_releases() {
+    echo $(web_pipe "https://api.github.com/repos/ublue-os/bazzite/releases" | grep 'download_url' | grep 'sum' | cut -d '/' -f8 | cut -d'v' -f2 | head -n 5)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL="https://github.com/ublue-os/bazzite/releases/download/v${RELEASE}"
+    ISO=$(web_pipe "https://api.github.com/repos/ublue-os/bazzite/releases" | grep 'download_url' | grep 'sum' | cut -d '"' -f4 | cut -d'.' -f1-5 | grep "${RELEASE}" | cut -d'/' -f9)
+    HASH=$(web_pipe "${URL}/${ISO}.sha256sum" | grep 'SHA256' | cut -d' ' -f4)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

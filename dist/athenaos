@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Athena OS"
+HOMEPAGE="https://athenaos.org/"
+INFO="Athena OS|Arch|-|https://athenaos.org/|Offer a different experience than the most used pentesting distributions by providing only tools that fit with the user needs and improving the access to hacking resources and learning materials."
+
+function dist_releases() {
+    echo $(web_pipe "https://api.github.com/repos/Athena-OS/athena/releases" | grep 'download_url' | grep rolling | cut -d'/' -f8 | sort -u)
+}
+
+function dist_editions() {
+    echo large small
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="athena-rolling-x86_64.iso"
+    local URL="https://github.com/Athena-OS/athena/releases/download/${RELEASE}"
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "disk_size=\"32G\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

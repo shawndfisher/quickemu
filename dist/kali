@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Kali"
+HOMEPAGE="https://www.kali.org/"
+INFO="Kali|Debian|-|https://www.kali.org/|The most advanced Penetration Testing Distribution."
+
+function dist_releases() {
+    echo current kali-weekly
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL="https://cdimage.kali.org/${RELEASE}"
+    ISO=$(web_pipe "${URL}/?C=M;O=D" | grep -o ">kali-linux-.*-installer-amd64.iso" | head -n 1 | cut -c 2-)
+    HASH=$(web_pipe "${URL}/SHA256SUMS" | grep -v torrent | grep "${ISO}" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "disk_size=\"32G\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

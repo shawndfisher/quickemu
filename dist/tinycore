@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Tiny Core Linux"
+HOMEPAGE="https://www.tinycorelinux.net/"
+INFO="Tiny Core Linux|Independent|-|http://www.tinycorelinux.net/|Highly modular based system with community build extensions."
+
+function dist_releases() {
+    echo 15 14
+}
+
+function dist_editions() {
+    echo Core TinyCore CorePlus CorePure64 TinyCorePure64
+}
+
+function dist_image() {
+    local ARCH="x86"
+    local HASH=""
+    local ISO="${EDITION}-${RELEASE}.0.iso"
+    case "${EDITION}" in
+        *Pure*) ARCH+="_64";;
+    esac
+    local URL="http://www.tinycorelinux.net/${RELEASE}.x/${ARCH}/release"
+    HASH=$(web_pipe "${URL}/${ISO}.md5.txt" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

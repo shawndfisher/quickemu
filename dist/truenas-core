@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="TrueNAS Core"
+HOMEPAGE="https://www.truenas.com/truenas-core/"
+INFO="TrueNAS Core|FreeBSD|-|https://www.truenas.com/truenas-core/|World’s most popular storage OS because it gives you the power to build your own professional-grade storage system to use in a variety of data-intensive applications without any software costs."
+
+GUEST="truenas"
+
+function dist_releases() {
+    echo 13
+}
+
+function dist_image() {
+    local ISO=""
+    local URL=""
+    local DLINFO="https://www.truenas.com/download-truenas-core/"
+    URL=$(web_pipe ${DLINFO} | grep -o "\"https://.*${RELEASE}.*\.iso\"" | cut -d'"' -f 2)
+    HASH=$(web_pipe "${URL}".sha256 | cut_1)
+    echo "${URL} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

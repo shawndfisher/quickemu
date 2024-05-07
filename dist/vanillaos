@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Vanilla OS"
+HOMEPAGE="https://vanillaos.org/"
+INFO="Vanilla OS|Debian,Ubuntu|-|https://vanillaos.org/|Designed to be a reliable and productive operating system for your daily work."
+
+function dist_releases() {
+    echo $(web_pipe "https://api.github.com/repos/Vanilla-OS/live-iso/releases" | grep 'download_url' | cut -d'/' -f8 | sort -ru)
+}
+
+function dist_image() {
+    local ISO=$(web_pipe "https://api.github.com/repos/Vanilla-OS/live-iso/releases" | grep 'download_url' | grep "${RELEASE}" | head -1 | cut -d'"' -f4)
+    local HASH_URL=$(echo "${ISO}" | sed s'|\.iso|\.sha256\.txt|g')
+    local HASH=$(web_pipe "${HASH_URL}" | cut_1)
+    echo "${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    ## Minimum is 50G for abroot, but a 64GB is allocated to give some headroom
+    echo "disk_size=\"64G\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

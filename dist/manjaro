@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Manjaro"
+HOMEPAGE="https://manjaro.org/"
+INFO="Manjaro|Arch|-|https://manjaro.org/|Versatile, free, and open-source Linux operating system designed with a strong focus on safeguarding user privacy and offering extensive control over hardware."
+
+function dist_releases() {
+    echo xfce gnome plasma cinnamon i3 sway
+}
+
+function dist_editions() {
+    echo full minimal
+}
+
+function dist_validate() {
+    if [[ ${RELEASE} == "sway" && ${EDITION} == "minimal" ]] ; then
+        echo "ERROR! Unsupported combination"
+        echo "       Manjaro Sway does not have a minimal edition"
+        exit 1;
+    fi
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local MANIFEST=""
+    local URL=""
+    local TYPE=""
+    case ${RELEASE} in
+      sway) MANIFEST="$(web_pipe https://mirror.manjaro-sway.download/manjaro-sway/release.json)";;
+      gnome|xfce|plasma) TYPE="official";;
+      *) TYPE="community";;
+    esac
+    [[ ${RELEASE} != "sway" ]] && MANIFEST="$(web_pipe https://gitlab.manjaro.org/web/iso-info/-/raw/master/file-info.json)"
+    [[ ${EDITION} == "minimal" && ${TYPE} != "sway" ]] && EDITION=".minimal" || EDITION=""
+    if [[ ${RELEASE} != "sway" ]]; then
+        URL="$(echo ${MANIFEST} | jq -r .${TYPE}.${RELEASE}${EDITION}.image)"
+    else
+        URL=$(echo ${MANIFEST} | jq -r '.[] | select(.name|test("^manjaro-sway-.*[.]iso$")) | select(.name|contains("unstable")|not) | .url')
+    fi
+    HASH=$(web_pipe "${URL}.sha512" | cut_1)
+    echo "${URL} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

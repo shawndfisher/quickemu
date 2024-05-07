@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Damn Small Linux"
+HOMEPAGE="https://www.damnsmalllinux.org/"
+
+function dist_releases() {
+    echo 2024
+}
+
+function dist_image() {
+    local HASH=""
+    local URL="https://www.damnsmalllinux.org/download"
+    local ISO="dsl-${RELEASE}.rc3.iso"
+
+    HASH="$(wget -q -O- "${URL}/${ISO}.md5.txt" | cut -d' ' -f1)"
+    
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

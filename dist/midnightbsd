@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="MidnightBSD"
+HOMEPAGE="https://www.midnightbsd.org/"
+
+GUEST="midnightbsd"
+
+function dist_releases() {
+    echo 3.1.4
+}
+
+function dist_image() {
+    local HASH=""
+    local URL="http://ns3.foolishgames.net/ftp/pub/MidnightBSD/releases/amd64/ISO-IMAGES/${RELEASE}"
+    local ISO="MidnightBSD-${RELEASE}--amd64-disc1.iso"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# function dist_vm_option_tweak() {
+#     echo "boot=\"legacy\"" >> "${CONF_FILE}"
+# }
+
+# vim:tabstop=4:shiftwidth=4:expandtab

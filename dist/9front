@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="9Front"
+HOMEPAGE="https://9front.org/"
+
+GUEST="9front"
+
+function dist_releases() {
+    # sed 's/\"9FRONT \"\(.*\)\" RELEASED/\"9FRONT \\\"\1\\\" RELEASED/'
+    echo latest
+}
+
+function dist_image() {
+    #| grep \"url\": | head -1 | cut -d' ' -f4 | cut -d',' -f1 | tr -d '"'
+
+    local HASH=""
+    local URL="https://9front.org/iso"
+    local ISO="$(wget -q -O- "${URL}" | grep "9front-.*.amd64.iso.gz\"" | cut -d'>' -f2 | cut -d'"' -f4)"
+    local HASH_URL="$(wget -q -O- "https://9front.org/" | grep "releases" | grep "http" | cut -d'"' -f2)"
+    
+    HASH="$(wget -q -O- "${HASH_URL}" | grep "9front-.*.amd64.iso.gz" | grep -v "href=" | cut -d' ' -f4)"
+
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_image_handle() {
+    gzip -d ${VM_PATH}/${ISO}
+    ISO="${ISO/.gz/}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

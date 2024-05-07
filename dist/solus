@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Solus"
+HOMEPAGE="https://getsol.us/"
+INFO="Solus|Independent|-|https://getsol.us/|Designed for home computing. Every tweak enables us to deliver a cohesive computing experience."
+
+function dist_releases() {
+    echo $(web_pipe "https://getsol.us/download/" | grep "isos" | grep Download | cut -d'-' -f 2 | sort -ru)
+}
+
+function dist_editions() {
+    echo $(web_pipe "https://getsol.us/download/" | grep "isos" | grep Download | cut -d'.' -f5 | cut -d'-' -f2- | sort -u)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="Solus-${RELEASE}-${EDITION}.iso"
+    local URL="https://downloads.getsol.us/isos/${RELEASE}"
+    HASH=$(web_pipe "${URL}/${ISO}.sha256sum" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

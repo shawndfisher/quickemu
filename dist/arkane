@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Arkane Linux"
+HOMEPAGE="https://arkanelinux.org"
+INFO="Arkane Linux|Arch|-|https://arkanelinux.org/|Arkane Linux is an opinionated, immutable, atomic, multi-root Arch-based distibution which aims to provide a GNOME-centered experienced with minimal yet full featured and sensible non-intrusive defaults."
+
+function dist_releases() {
+    echo 2024.03.30 2024.01.25
+}
+
+function dist_editions() {
+    echo gnome arkdep
+}
+
+function dist_validate() {
+    if [[ "${EDITION}" == "gnome" && "${RELEASE}" =~ "2024.03." ]] || [[ "${EDITION}" == "gnome" && "${RELEASE}" =~ "2024.02." ]]; then
+        echo "ERROR! Unsupported combination"
+        echo "       Arkane ${RELEASE} is not available in ${EDITION} edition"
+        exit 1
+    fi
+}
+
+function dist_image() {
+    local HASH=""
+    local URL=""
+    local ISO=""
+    case ${EDITION} in
+      gnome)
+          URL="https://download.arkanelinux.org/arkane/arkanelinux-${RELEASE}"
+          ISO="arkanelinux-${RELEASE}-uefi_only.iso"
+          ;;
+      arkdep)
+          URL="https://download.arkanelinux.org/arkane-${EDITION}/arkanelinux-${EDITION}-${RELEASE}"
+          ISO="arkanelinux-${EDITION}-${RELEASE}-uefi_only.iso"
+          ;;
+    esac
+    HASH=$(web_pipe "${URL}/${ISO}.sha256sum" | grep "${ISO}")
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "disk_size=\"64G\"" >> "${CONF_FILE}"
+    echo "ram=\"4G\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

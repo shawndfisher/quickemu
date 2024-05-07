@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="elementary OS"
+HOMEPAGE="https://www.elementary.io/"
+INFO="elementary OS|Debian,Ubuntu|-|https://elementary.io/|Thoughtful, capable, and ethical replacement for Windows and macOS."
+
+function dist_releases() {
+    echo 7.1 7.0
+}
+
+function dist_image() {
+    local HASH=""
+    case ${RELEASE} in
+        7.0) STAMP="20230129rc";;
+        7.1) STAMP="20230926rc";;
+    esac
+    local ISO="elementaryos-${RELEASE}-stable.${STAMP}.iso"
+    local URL="https://ams3.dl.elementary.io/download"
+    echo "${URL}/$(date +%s | base64)/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Archcraft"
+HOMEPAGE="https://www.archcraft.io"
+INFO="Archcraft|Arch|-|https://archcraft.io/|Yet another minimal Linux distribution, based on Arch Linux."
+
+function dist_releases() {
+    echo latest
+}
+
+function dist_image() {
+    local HASH=""
+    local URL=""
+    URL="https://sourceforge.net/projects/archcraft/files/${RELEASE}/download"
+    echo "${URL} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

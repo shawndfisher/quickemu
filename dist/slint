@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Slint"
+HOMEPAGE="https://slint.fr/"
+INFO="Slint|Slackware|-|https://slint.fr/|Slint is an easy-to-use, versatile, blind-friendly Linux distribution for 64-bit computers. Slint is based on Slackware and borrows tools from Salix. Maintainer: Didier Spaier."
+
+function dist_releases() {
+    # 15.0.1 returns a 404 so is excluded
+    echo $(web_pipe "https://slackware.uk/slint/x86_64/" | grep "slint-" | cut -d'>' -f2 | cut -d'-' -f2 | tr -d "/\"" | grep -v "15.0.1" | sort -ru)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL="https://slackware.uk/slint/x86_64/slint-${RELEASE}/iso"
+    ISO=$(web_pipe "${URL}" | grep "slint64-" | cut -d'>' -f2 | cut -d'"' -f2 | head -n1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f4)
+    echo "${URL}/${ISO}" "${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "disk_size=\"50G\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

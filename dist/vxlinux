@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="VX Linux"
+HOMEPAGE="https://vxlinux.org/"
+INFO="VX Linux|Void|-|https://vxlinux.org/|Pre-configured, secure systemd-free Plasma desktop with focus on convenience, performance and simplicity. Based on the excellent Void Linux."
+
+function dist_releases() {
+    echo $(web_pipe "https://github.com/VX-Linux/main/releases/latest" | grep -o -e 'releases/tag/[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]' | sort -u | cut -d'/' -f 3)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="vx-${RELEASE}.iso"
+    local URL="https://github.com/VX-Linux/main/releases/download/${RELEASE}"
+    HASH=$(web_pipe "${URL}/vx-${RELEASE}.md5" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

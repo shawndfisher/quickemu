@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Alma Linux"
+HOMEPAGE="https://almalinux.org/"
+INFO="Alma Linux|Fedora,RedHat|-|https://almalinux.org/|Community owned and governed, forever-free enterprise Linux distribution, focused on long-term stability, providing a robust production-grade platform. AlmaLinux OS is binary compatible with RHEL®."
+
+function dist_releases() {
+    echo 9 8
+}
+
+function dist_editions() {
+    echo boot minimal dvd
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="AlmaLinux-${RELEASE}-latest-x86_64-${EDITION}.iso"
+    local URL="https://repo.almalinux.org/almalinux/${RELEASE}/isos/x86_64"
+    HASH="$(web_pipe "${URL}/CHECKSUM" | grep "(${ISO}" | cut -d' ' -f4)"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+     echo "disk_size=\"32G\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

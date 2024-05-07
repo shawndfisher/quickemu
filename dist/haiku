@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Haiku"
+HOMEPAGE="https://www.haiku-os.org/"
+INFO="Haiku|Independent|-|https://www.haiku-os.org/|Specifically targets personal computing. Inspired by the BeOS, Haiku is fast, simple to use, easy to learn and yet very powerful."
+
+GUEST="haiku"
+
+function dist_releases() {
+    echo r1beta4 r1beta3
+}
+
+function dist_editions() {
+    echo x86_64 x86_gcc2h
+}
+
+function dist_image() {
+    local ISO="haiku-${RELEASE}-${EDITION}-anyboot.iso"
+    local URL="http://mirror.rit.edu/haiku/${RELEASE}"
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | grep "${ISO}" | cut -d' ' -f4)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

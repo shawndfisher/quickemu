@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="nomadBSD"
+HOMEPAGE="https://nomadbsd.org/"
+NFO="nomadBSD|Independent|-|https://www.nomadbsd.org/|NomadBSD is a persistent live system for USB flash drives, based on FreeBSD®. "
+
+GUEST="nomadbsd"
+IMAGE_TYPE="img"
+
+function dist_releases() {
+    echo 20240126 20231121
+}
+
+function dist_editions() {
+    echo ufs zfs
+}
+
+function dist_image() {
+    local HASH=""
+    local URL="https://nomadbsd.org/download"
+    local ISO="nomadbsd-140R-${RELEASE}.amd64.${EDITION}.img.lzma"
+    HASH=$(wget -q -O- "${ISO}.sha256" | cut -d'=' -f2 | tr -d ' ')
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+function dist_image_handle() {
+    lzma -d ${VM_PATH}/${ISO}
+    qemu-img convert -f raw -O qcow2 "${VM_PATH}/${ISO/.lzma}" "${VM_PATH}/disk.qcow2"
+    ISO="${ISO/.lzma}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

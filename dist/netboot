@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Netboot"
+HOMEPAGE="https://netboot.xyz"
+INFO="netboot.xyz|iPXE|-|https://netboot.xyz/|Your favorite operating systems in one place."
+
+function dist_releases() {
+    echo latest
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="netboot.xyz.iso"
+    local URL="https://boot.netboot.xyz/ipxe"
+    HASH=$(web_pipe "${URL}/netboot.xyz-sha256-checksums.txt" | grep "${ISO}" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

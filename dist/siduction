@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Siduction"
+HOMEPAGE="https://siduction.org/"
+INFO="Siduction|Debian|-|https://siduction.org/|Operating system based on the Linux kernel and the GNU project. In addition, there are applications and libraries from Debian."
+
+function dist_releases() {
+    echo latest
+}
+
+function dist_editions() {
+    echo kds lxqt nox xfce xorg
+}
+
+function dist_image() {
+    local HASH=""
+    local DATE=""
+    local ISO=""
+    local URL="https://mirrors.dotsrc.org/siduction/iso/Standing_on_the_Shoulders_of_Giants/${EDITION}"
+    DATE=$(web_pipe "${URL}"| grep .iso.md5 | cut -d'-' -f6 | cut -d'.' -f1)
+    HASH=$(web_pipe "${URL}/${ISO}.md5" | cut_1)
+    ISO="siduction-2023.1.1-Standing_on_the_Shoulders_of_Giants-${EDITION}-amd64-${DATE}.iso"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

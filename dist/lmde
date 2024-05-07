@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Linux Mint Debian Edition"
+HOMEPAGE="https://www.linuxmint.com/download_lmde.php"
+INFO="Linux Mint Debian Edition|Debian|-|https://www.linuxmint.com/download_lmde.php|Aims to be as similar as possible to Linux Mint, but without using Ubuntu. The package base is provided by Debian instead."
+
+function dist_releases() {
+    echo 6 5
+}
+
+function dist_editions() {
+    echo cinnamon
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="lmde-${RELEASE}-${EDITION}-64bit.iso"
+    local URL="https://mirror.bytemark.co.uk/linuxmint/debian"
+    HASH=$(web_pipe "${URL}/sha256sum.txt" | grep "${ISO}" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

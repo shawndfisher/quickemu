@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Endless OS"
+HOMEPAGE="https://www.endlessos.org/os"
+INFO="Endless OS|Debian|-|https://www.endlessos.org/os|Completely Free, User-Friendly Operating System Packed with Educational Tools, Games, and More."
+
+function dist_releases() {
+    echo 5.1.1 5.0.0
+}
+
+function dist_editions() {
+    echo base en fr pt_BR es
+}
+
+function dist_image() {
+    local HASH="" # No hash - there is a signature in .asc signed by
+    #https://d1anzknqnc1kmb.cloudfront.net/eos-image-keyring.gpg
+    # (4096R: CB50 0F7B C923 3FAD 32B4 E720 9E0C 1250 587A 279C)
+    local FILE_TS=""
+    #https://d1anzknqnc1kmb.cloudfront.net/eos-image-keyring.gpg
+    # (4096R: CB50 0F7B C923 3FAD 32B4 E720 9E0C 1250 587A 279C)
+    case ${RELEASE} in
+        5.1.1)
+            case ${EDITION} in
+                base)  FILE_TS="240103-025438";;
+                fr)    FILE_TS="240103-025438";;
+                en)    FILE_TS="240103-025437";;
+                es)    FILE_TS="240103-025438";;
+                pt_BR) FILE_TS="240103-030103";;
+            esac;;
+        5.0.0)
+            case ${EDITION} in
+                base)  FILE_TS="230127-211122";;
+                fr)    FILE_TS="230127-213415";;
+                en)    FILE_TS="230127-212436";;
+                es)    FILE_TS="230127-212646";;
+                pt_BR) FILE_TS="230127-220328";;
+            esac;;
+    esac
+    URL="https://images-dl.endlessm.com/release/${RELEASE}/eos-amd64-amd64/${EDITION}"
+    ISO="eos-eos${RELEASE:0:3}-amd64-amd64.${FILE_TS}.${EDITION}.iso"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "disk_size=\"32G\"" >> "${CONF_FILE}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

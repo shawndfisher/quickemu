@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="PureOS"
+HOMEPAGE="https://www.pureos.net"
+INFO="PureOS|Debian|-|https://www.pureos.net/|A fully free/libre and open source GNU/Linux operating system, endorsed by the Free Software Foundation."
+
+function dist_releases() {
+    echo "$(web_pipe "https://www.pureos.net/download/" | grep -m 1 "downloads.puri" | cut -d '"' -f 2 | cut -d '-' -f 4)"
+}
+
+function dist_editions() {
+    echo gnome plasma
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL=""
+    local PureName=
+    PureName="$(web_pipe "https://www.pureos.net/download/" | grep -m 1 "downloads.puri" | cut -d '/' -f 4)"
+    local PureDate=
+    PureDate="$(web_pipe "https://www.pureos.net/download/" | grep -m 1 "downloads.puri" | cut -d '/' -f 6)"
+    local PureDateSquashed="${PureDate//'-'/}"
+    edition="${EDITION,,}"
+    URL="https://downloads.puri.sm/${PureName}/${edition}/${PureDate}"
+    ISO="pureos-${RELEASE}-${edition}-live-${PureDateSquashed}_amd64.iso"
+    local IsoTrimmed=
+    IsoTrimmed="${ISO%.*}"
+    HASH="$(web_pipe "${URL}/${IsoTrimmed}.checksums_sha256.txt" | grep -m 1 '.iso' | cut -d '.' -f 1)"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

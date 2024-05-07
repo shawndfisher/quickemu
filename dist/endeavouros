@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="EndeavorOS"
+HOMEPAGE="https://endeavouros.com/"
+INFO="EndeavourOS|Arch|-|https://endeavouros.com/|Provides an Arch experience without the hassle of installing it manually for both x86_64 and ARM systems."
+
+function dist_releases() {
+    local ENDEAVOUR_RELEASES="$(web_pipe "https://mirror.alpix.eu/endeavouros/iso/" | LC_ALL="en_US.UTF-8" sort -Mr | grep -o -P '(?<=<a href=").*(?=.iso">)' | grep -v 'x86_64' | cut -c 13- | head -n 5 | tr '\n' ' ')"
+    echo "${ENDEAVOUR_RELEASES,,}"
+}
+
+function dist_image() {
+    local HASH=""
+    local URL="https://mirror.alpix.eu/endeavouros/iso"
+    # Find EndeavourOS releases from mirror, pick one matching release
+    local ENDEAVOUR_RELEASES="$(web_pipe "${URL}/" | grep -o -P '(?<=<a href=").*(?=.iso">)' | grep -v 'x86_64')"
+    local ISO="$(echo "${ENDEAVOUR_RELEASES}" | grep -i "${RELEASE}").iso"
+    HASH=$(web_pipe "${URL}/${ISO}.sha512sum" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

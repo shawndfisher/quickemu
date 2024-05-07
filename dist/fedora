@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Fedora"
+HOMEPAGE="https://www.fedoraproject.org/"
+INFO="Fedora|Independent|-|https://www.fedoraproject.org/|Innovative platform for hardware, clouds, and containers, built with love by you."
+
+function dist_releases() {
+    echo $(web_pipe "https://getfedora.org/releases.json" | jq -r 'map(.version) | unique | .[]' | sort -r)
+}
+
+function dist_editions() {
+    echo  $(web_pipe "https://getfedora.org/releases.json" | jq -r 'map(select(.arch=="x86_64" and .variant!="Labs" and .variant!="IoT" and .variant!="Container" and .variant!="Cloud" and .variant!="Everything"  and .subvariant!="Security" and .subvariant!="Server_KVM" and .subvariant!="SoaS")) | map(.subvariant) | unique | .[]')
+}
+
+function dist_validate() {
+    if [[ "${RELEASE}" -lt 40 && "${EDITION}" == "Onyx" ]] || [[ "${RELEASE}" -lt 40 && "${EDITION}" == "Sericea" ]]; then
+        echo "ERROR! Unsupported combination"
+        echo "       Fedora ${RELEASE} ${EDITION} is not available, please choose another Release or Edition"
+        exit 1;
+    fi
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local JSON=""
+    local URL=""
+    local VARIANT=""
+    case ${EDITION} in
+        Server|Kinoite|Onyx|Silverblue|Sericea|Workstation) VARIANT="${EDITION}";;
+        *) VARIANT="Spins";;
+    esac
+    JSON=$(web_pipe "https://getfedora.org/releases.json" | jq '.[] | select(.variant=="'${VARIANT}'" and .subvariant=="'"${EDITION}"'" and .arch=="x86_64" and .version=="'"${RELEASE}"'")')
+    URL=$(echo "${JSON}" | jq -r '.link' | head -n1)
+    HASH=$(echo "${JSON}" | jq -r '.sha256' | head -n1)
+    echo "${URL} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

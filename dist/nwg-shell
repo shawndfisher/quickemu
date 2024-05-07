@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="nwg-shell"
+HOMEPAGE="https://nwg-piotr.github.io/nwg-shell/"
+INFO="nwg-shell|Arch|nwg:nwg|https://nwg-piotr.github.io/nwg-shell/|Arch Linux ISO with nwg-shell for sway and Hyprland"
+
+function dist_releases() {
+    echo $(web_pipe "https://sourceforge.net/projects/nwg-iso/rss?path=/" | grep 'url=' | grep '64.iso' | cut -d'/' -f12 | cut -d'-' -f3)
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="nwg-live-${RELEASE}-x86_64.iso"
+    local URL="https://sourceforge.net/projects/nwg-iso/files"
+    HASH="$(web_pipe "https://sourceforge.net/projects/nwg-iso/rss?path=/" | grep "${ISO}" | cut -d'>' -f3 | cut -d'<' -f1 | tail -1)"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

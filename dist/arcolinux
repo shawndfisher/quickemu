@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Arco Linux"
+HOMEPAGE="https://www.arcolinux.org"
+INFO="Arco Linux|Arch|-|https://arcolinux.com/|Is all about becoming an expert in linux."
+
+function dist_releases() {
+    echo $(web_pipe "https://arcolinux.ant.seedhost.eu/arcolinux/iso/" | grep -o -E ">v[[:digit:]]{2}.[[:digit:]]{2}.[[:digit:]]{2}" | sed -e "s/>//" | sort -r | head -n 5)
+}
+
+function dist_editions() {
+    echo large small
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="arcolinux${EDITION:0:1}-${RELEASE}-x86_64.iso"
+    local URL="https://mirror.accum.se/mirror/arcolinux.info/iso/${RELEASE}"
+    HASH=$(web_pipe "${URL}/${ISO}.sha1" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

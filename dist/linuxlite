@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Linux Lite"
+HOMEPAGE="https://www.linuxliteos.com/"
+INFO="Linux Lite|Debian,Ubuntu|-|https://www.linuxliteos.com/|Your first simple, fast and free stop in the world of Linux."
+
+function dist_releases() {
+    echo 6.6 6.4 6.2 6.0
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="linux-lite-${RELEASE}-64bit.iso"
+    local URL="https://sourceforge.net/projects/linux-lite/files/${RELEASE}"
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

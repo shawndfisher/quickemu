@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="OpenIndiana"
+HOMEPAGE="https://www.openindiana.org/"
+INFO="OpenIndiana|Solaris,OpenSolaris|-|https://www.openindiana.org/|Community supported illumos-based operating system."
+
+GUEST="solaris"
+
+function dist_releases() {
+    echo $(web_pipe "https://dlc.openindiana.org/isos/hipster/" | grep link | cut -d'/' -f 1 | cut -d '"' -f4 | sort -r | tail +2 | head -n 5)
+}
+
+function dist_editions() {
+    echo gui text minimal
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO=""
+    local URL=""
+    URL="https://dlc.openindiana.org/isos/hipster/${RELEASE}"
+    ISO="OI-hipster-${EDITION}-${RELEASE}.iso"
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" |cut_1)
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\""
+    echo "disk_size=\"32G\""
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab
