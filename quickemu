@@ -734,14 +734,14 @@ function configure_os_quirks() {
         NET_DEVICE="rtl8139"
     fi
 
-    if [ "${guest_os}" == "freebsd" ] || [ "${guest_os}" == "ghostbsd" ]; then
+    if [ "${guest_os}" == "freebsd" ] || [ "${guest_os}" == "ghostbsd" ] || [ "${guest_os}" == "midnightbsd" ] || [ "${guest_os}" == "nomadbsd" ]; then
         mouse="usb"
     fi
 
     case ${guest_os} in
         *bsd|linux*|windows*) NET_DEVICE="virtio-net";;
         freedos) sound_card="sb16";;
-        *solaris) usb_controller="xhci"
+        aspireos|icaros|*solaris) usb_controller="xhci"
                   sound_card="ac97";;
         reactos) NET_DEVICE="e1000"
                  keyboard="ps2";;
@@ -1385,6 +1385,13 @@ function vm_boot() {
         args+=(-device ahci,id=ahci
             -device ide-hd,bus=ahci.0,drive=SystemDisk
             -drive id=SystemDisk,if=none,format=qcow2,file="${disk_img}" ${STATUS_QUO})
+
+    elif [ "${guest_os}" == "aspireos" ] || [ "${guest_os}" == "arosone" ] || [ "${guest_os}" == "icaros" ]; then
+    # shellcheck disable=SC2054,SC2206
+    args+=(-device ahci,id=ahci
+           -device ide-hd,bus=ahci.0,drive=SystemDisk
+           -drive id=SystemDisk,if=none,index=1,format=qcow2,file="${disk_img}" ${STATUS_QUO}
+           -boot order=d,menu=on)
 
     elif [ "${guest_os}" == "batocera" ] ; then
         # shellcheck disable=SC2054,SC2206
