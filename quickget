@@ -475,8 +475,8 @@ EOF
         fi
 
         # OS specific tweaks
-        if [[ $(type -t "dist_vm_options_tweak") == function ]]; then
-            dist_vm_options_tweak
+        if [[ $(type -t "dist_vm_option_tweak") == function ]]; then
+            dist_vm_option_tweak
         fi
     fi
 
