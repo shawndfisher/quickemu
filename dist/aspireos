@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="AspireOS"
+HOMEPAGE="https://sites.google.com/site/arosaspireone/"
+INFO="AsipreOS|Independent|-|https://sites.google.com/site/arosaspireone/|Free, open source, powerful AmigaOS clone."
+
+GUEST="aspireos"
+
+function dist_releases() {
+    echo 2.22
+}
+
+function dist_image() {
+    local HASH=""
+    local URL="http://arosarchives.os4depot.net/download.php?file=development/misc"
+    local ISO="aspireos_v.${RELEASE}_i386.rar"
+
+    echo "${URL}"/"${ISO}" "${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+function dist_image_handle() {
+    unrar x -ep ${VM_PATH}/${ISO} -op ${VM_PATH}
+    ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.rar')
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab
