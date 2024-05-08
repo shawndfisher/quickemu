@@ -1069,6 +1069,8 @@ function configure_file_sharing() {
                     echo "             Required for macOS integration 👆"
                 fi
             fi
+        else
+          echo ""
         fi
 
         # SMB
