@@ -107,7 +107,11 @@ function error_not_supported_argument() {
 function validate_release() {
     local DISPLAY_NAME="$(pretty_name "${OS}")"
     local RELEASES="$("dist_releases")"
-    error_not_supported_release
+    if [[ $(type -t "dist_validate") == function ]]; then
+        dist_validate
+    else
+        error_not_supported_release
+    fi
 }
 
 function list_json() {
