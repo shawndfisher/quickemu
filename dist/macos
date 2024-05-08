@@ -180,7 +180,7 @@ function dist_image() {
     echo "file://${PWD}/${VM_PATH}/RecoveryImage.img"
 }
 
-function dist_vm_options_tweak() {
+function dist_vm_option_tweak() {
     echo "macos_release=\"${RELEASE}\"" >> "${CONF_FILE}"
     # https://github.com/quickemu-project/quickemu/issues/438
     if [ "${RELEASE}" == "monterey" ]; then
