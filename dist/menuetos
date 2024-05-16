@@ -2,6 +2,7 @@
 
 PRETTY_NAME="MenuetOS"
 HOMEPAGE="https://menuetos.net/"
+INFO="MenuetOS|Independent|-|https://menuetos.net/|MenuetOS is an operating system in development for PC, written completely in 64bit assembly language."
 
 GUEST="menuetos"
 
@@ -14,7 +15,6 @@ function dist_image() {
     local URL="https://drive.usercontent.google.com/download?id=${FILEID}&confirm=xxx"
     local ISO="M64CD15060.zip"
     local HASH="3088df5f974220658ea77cab8a265a12cf976f6497c33648877f7f89827ff95a"
-
     echo "${URL}/${ISO} ${HASH}"
 }
 
