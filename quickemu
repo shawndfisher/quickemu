@@ -734,15 +734,20 @@ function configure_os_quirks() {
         NET_DEVICE="rtl8139"
     fi
 
-    if [ "${guest_os}" == "freebsd" ] || [ "${guest_os}" == "ghostbsd" ] || [ "${guest_os}" == "midnightbsd" ] || [ "${guest_os}" == "nomadbsd" ]; then
+    if [ "${guest_os}" == "cros" ] || [ "${guest_os}" == "freebsd" ] || [ "${guest_os}" == "ghostbsd" ] || [ "${guest_os}" == "midnightbsd" ] || [ "${guest_os}" == "nomadbsd" ]; then
         mouse="usb"
     fi
 
     case ${guest_os} in
         *bsd|linux*|windows*) NET_DEVICE="virtio-net";;
         freedos) sound_card="sb16";;
-        aspireos|icaros|*solaris) usb_controller="xhci"
-                  sound_card="ac97";;
+        aspireos|cros|icaros|*solaris) usb_controller="xhci"
+                  sound_card="ac97"
+                  if [ "${guest_os}" == "cros" ]; then
+                      USB_HOST_PASSTHROUGH_CONTROLLER="nec-usb-xhci"
+                      GUEST_TWEAKS+=" -global nec-usb-xhci.msi=off"
+                  fi
+                  ;;
         reactos) NET_DEVICE="e1000"
                  keyboard="ps2";;
         macos)
@@ -879,6 +884,7 @@ function configure_display() {
     # https://www.kraxel.org/blog/2019/09/display-devices-in-qemu/
     case ${guest_os} in
         *bsd) DISPLAY_DEVICE="VGA";;
+        cros) DISPLAY_DEVICE="virtio-vga";;
         linux_old|solaris) DISPLAY_DEVICE="vmware-svga";;
         linux)
             case ${display} in
@@ -1350,6 +1356,11 @@ function vm_boot() {
         # Attach the unattended configuration to Windows guests when booting from ISO
         # shellcheck disable=SC2054
         args+=(-drive media=cdrom,index=2,file="${VMDIR}/unattended.iso")
+    elif [ -n "${iso}" ] && [ "${guest_os}" == "cros" ]; then
+        # An issue exists when using media=cdrom
+        # shellcheck disable=SC2054
+        args+=(-drive index=0,file="${iso}")
+        iso=""
     fi
 
     if [ -n "${floppy}" ]; then

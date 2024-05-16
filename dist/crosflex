@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="Cros Fles"
+HOMEPAGE="https://crux.nu/"
+INFO="CRUX|Independent|-|https://crux.nu/|CRUX is a lightweight Linux distribution for the x86-64 architecture targeted at experienced Linux users."
+
+GUEST="cros"
+
+function dist_releases() {
+    echo latest
+}
+
+function dist_image() {
+    local HASH=""
+    local ISO="${RELEASE}.bin.zip"
+    local URL="https://dl.google.com/chromeos-flex/images"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+function dist_image_handle() {
+    unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
+    ISO=$(ls ${VM_PATH} | grep -i '.bin' | grep -v 'zip')
+    qemu-img create -f qcow2 "${VM_PATH}/disk.qcow2" 16G
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab
