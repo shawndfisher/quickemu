@@ -2,10 +2,21 @@
 
 PRETTY_NAME="nomadBSD"
 HOMEPAGE="https://nomadbsd.org/"
-NFO="nomadBSD|Independent|-|https://www.nomadbsd.org/|NomadBSD is a persistent live system for USB flash drives, based on FreeBSD®. "
+INFO="nomadBSD|Independent|-|https://www.nomadbsd.org/|NomadBSD is a persistent live system for USB flash drives, based on FreeBSD®. "
 
 GUEST="nomadbsd"
 IMAGE_TYPE="img"
+
+#TODO eventually let's move this into quickget somewhere
+function dist_requirements() {
+    # Check if lzma is available
+    LZMA=$(command -v lzma)
+    if [ ! -e "${LZMA}" ]; then
+        echo "Error! lzma not found. Please install lzma"
+        # Maybe add some dist specific ways to get it?
+        exit 1
+    fi
+}
 
 function dist_releases() {
     echo 20240126 20231121
@@ -28,8 +39,10 @@ function dist_vm_option_tweak() {
 }
 
 function dist_image_handle() {
+    dist_requirements
     lzma -d ${VM_PATH}/${ISO}
     qemu-img convert -f raw -O qcow2 "${VM_PATH}/${ISO/.lzma}" "${VM_PATH}/disk.qcow2"
+    qemu-img resize "${VM_PATH}/disk.qcow2" 16G
     ISO="${ISO/.lzma}"
 }
 
