@@ -5,7 +5,7 @@ HOMEPAGE="https://mxlinux.org/"
 INFO="MX Linux|Debian,Antix|-|https://mxlinux.org/|Designed to combine elegant and efficient desktops with high stability and solid performance."
 
 function dist_releases() {
-    echo 23.2
+    echo 23.3 23.2
 }
 
 function dist_editions() {
