@@ -318,9 +318,9 @@ function web_get() {
         FILE="${URL##*/}"
     fi
 
-    # echo "web_get URL ${URL}"
-    # echo "web_get DIR ${DIR}"
-    # echo "web_get FILE ${FILE}"
+    echo "web_get URL ${URL}"   >&2
+    echo "web_get DIR ${DIR}"   >&2
+    echo "web_get FILE ${FILE}" >&2
 
     # Process any URL redirections after the file name has been extracted
     URL=$(web_redirect "${URL}")
@@ -509,11 +509,16 @@ function create_vm() {
     local HASH="${URL_HASH[1]}"
     local ISO="${URL##*/}"
 
-    # echo "create_vm URL ${URL}"
-    # echo "create_vm ISO ${ISO}"
-    # echo "create_vm HASH ${HASH}"
+    if [[ -z "$1" ]]; then
+        echo "create_vm: Bad URL"
+        exit 1
+    fi
 
-    if [[ $URL == *"drive.usercontent.google.com"* ]];  then
+    echo "create_vm URL ${URL}"   >&2
+    echo "create_vm ISO ${ISO}"   >&2
+    echo "create_vm HASH ${HASH}" >&2
+
+    if [[ $URL == *"drive.usercontent.google.com"* ]] || [[ $URL == *"microsoft.com"* ]]; then
         local FILE="${URL##*/}"
         URL="${URL%/${FILE}}"
         ISO=${FILE}
@@ -688,6 +693,16 @@ if [ -n "${2}" ]; then
     fi
 
     validate_release
+    if [[ $(type -t "pre_dist_image") == function ]]; then
+        pre_dist_image
+    fi
+
+    # readarray arguments <<< "$(dist_image)"
+    # echo "There were ${#arguments[@]} arguments."
+    # printf '%s\n' "${arguments[@]}"
+
+    # dist_image
+    # exit 0
     create_vm "$("dist_image")"
 else
     error_specify_release
