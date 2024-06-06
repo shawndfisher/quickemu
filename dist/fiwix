@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+PRETTY_NAME="FiwixOS"
+HOMEPAGE="https://www.fiwix.org/"
+INFO="FiwixOS|Independent|-|https://www.fiwix.org/|FiwixOS is a completely free, open source, UNIX-like hobby operating system based on the Fiwix kernel."
+
+GUEST="fiwix"
+
+function dist_releases() {
+    echo 3.3
+}
+
+function dist_image() {
+    local URL="https://www.fiwix.org"
+    local ISO="FiwixOS-3.3-i386.iso"
+    local HASH="20000f5febf1a15d72e83774685e07eaed10635d97088fc4cf9035d5af1ce68d"
+    echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
+
+function dist_image_handle() {
+    qemu-img create -f qcow2 "${VM_PATH}/disk.qcow2" 1G
+}
+
+# vim:tabstop=4:shiftwidth=4:expandtab

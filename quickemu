@@ -748,7 +748,7 @@ function configure_os_quirks() {
                       GUEST_TWEAKS+=" -global nec-usb-xhci.msi=off"
                   fi
                   ;;
-        reactos) NET_DEVICE="e1000"
+        fiwix|essebcereactos) NET_DEVICE="e1000"
                  keyboard="ps2";;
         macos)
             # Tune QEMU optimisations based on the macOS release, or fallback to lowest
@@ -1173,6 +1173,10 @@ function vm_boot() {
     configure_usb
     configure_tpm
 
+    if [ "${guest_os}" == "essence" ]; then
+      VIDEO=""
+    fi
+
     echo "#!/usr/bin/env bash" > "${VMDIR}/${VMNAME}.sh"
 
     # Changing process name is not supported on macOS
@@ -1346,7 +1350,7 @@ function vm_boot() {
         # shellcheck disable=SC2054
         args+=(-drive media=cdrom,index=2,file="${iso}")
         iso=""
-    elif [ -n "${iso}" ] && [ "${guest_os}" == "reactos" ]; then
+    elif [ -n "${iso}" ] && [ "${guest_os}" == "reactos" ] || [ "${guest_os}" == "fiwix" ]; then
         # https://reactos.org/wiki/QEMU
         # shellcheck disable=SC2054
         args+=(-boot order=d
@@ -1413,7 +1417,11 @@ function vm_boot() {
             -device virtio-blk-pci,drive=SystemDisk
             -drive id=SystemDisk,if=none,format=qcow2,file="${disk_img}" ${STATUS_QUO})
 
-    elif [ "${guest_os}" == "reactos" ]; then
+    elif [ "${guest_os}" == "essence" ]; then
+        # shellcheck disable=SC2054,SC2206
+        args+=(-drive file="${img}",format=raw)
+
+    elif [ "${guest_os}" == "reactos" ] || [ "${guest_os}" == "fiwix" ]; then
         # https://reactos.org/wiki/QEMU
         # shellcheck disable=SC2054,SC2206
         args+=(-drive if=ide,index=0,media=disk,file="${disk_img}")
