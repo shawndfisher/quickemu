@@ -2,11 +2,12 @@
 
 PRETTY_NAME="Icaros"
 HOMEPAGE="https://vmwaros.blogspot.com/"
+INFO="Icaros|Independent|-|https://vmwaros.blogspot.com/|Icaros Desktop is an Amiga-like operating system for the PC platform, with a full desktop environment, distributed on a bootable media."
 
 GUEST="icaros"
 
 function dist_releases() {
-    echo 2.2.5 2.2.6 2.2.7 2.2.8 2.3.0
+    echo 2.3.0 2.2.8 2.2.7 2.2.6 2.2.5
 }
 
 function dist_editions() {
@@ -67,7 +68,7 @@ function dist_vm_option_tweak() {
 }
 
 function dist_image_handle() {
-    unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
+    unzip -j ${VM_PATH}/${ISO} -d ${VM_PATH}
     ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.zip')
 }
 
