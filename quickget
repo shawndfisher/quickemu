@@ -672,7 +672,9 @@ else
 fi
 
 # Source the OS' dist file
-source $(dirname "$0")/dist/${OS}
+if [ -e $(dirname "$0")/dist/${OS} ]; then
+    source $(dirname "$0")/dist/${OS}
+fi
 
 os_supported
 
