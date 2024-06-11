@@ -7,13 +7,11 @@ INFO="AROS One|AROS|-|https://sites.google.com/view/arosone/arosoneo| x86 distri
 GUEST="arosone"
 
 function dist_releases() {
-    echo $(wget -q -O- "https://sites.google.com/view/arosone/arosone" | grep -Po "AROS One ABIv0 v\K[0-9.]+")
+    echo $(web_pipe "https://sites.google.com/view/arosone/arosone" | grep -Po "AROS One ABIv0 v\K[0-9.]+")
 }
 
 function dist_image() {
-    # local TMPURL="https://sites.google.com/view/arosone/arosone"
-    # FILEID=$(wget -q -O- "${TMPURL}" | grep -Po "(?<=href=\"https://drive.google.com/file/d/)[^/]+(?=/)" | head -1)
-    local FILEID="1K7P5eEnm8-cG5ADHita12cdrkc6x9WIb"
+    local FILEID=$(web_pipe "https://sites.google.com/view/arosone/arosone" | grep -Po 'href="\K.*?(?=")' | grep "https://drive.google.com/file/d/" | head -1 | cut -d"/" -f6)
     URL="https://drive.usercontent.google.com/download?id=${FILEID}&confirm=xxx"
     ISO="ArosOne-x86-v${RELEASE}-ISO-DVD.zip"
     HASH=""
