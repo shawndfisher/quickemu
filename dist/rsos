@@ -17,8 +17,8 @@ function dist_image() {
 
 function dist_image_handle() {
     if [ -f "${VM_PATH}/download_rsos" ]; then
-        ISO="${VM_PATH}/RSOS-${RELEASE}-amd64.hybrid.iso"
-        mv "${VM_PATH}/download_rsos" "${ISO}"
+        ISO="RSOS-${RELEASE}-amd64.hybrid.iso"
+        mv "${VM_PATH}/download_rsos" "${VM_PATH}/${ISO}"
     fi
 }
 
