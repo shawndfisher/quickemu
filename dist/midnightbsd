@@ -6,7 +6,7 @@ HOMEPAGE="https://www.midnightbsd.org/"
 GUEST="midnightbsd"
 
 function dist_releases() {
-    echo 3.1.4
+    echo $(web_pipe "https://midnightbsd.org/ftp/MidnightBSD/releases/amd64/" | grep "<a href=\"[23].[012]\." | cut -d"\"" -f2 | cut -d"/" -f1 | sort -ru)
 }
 
 function dist_image() {
