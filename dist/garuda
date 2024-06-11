@@ -17,7 +17,7 @@ function dist_image() {
     local ISO=""
     local URL="https://iso.builds.garudalinux.org/iso/latest/garuda"
     ISO=${EDITION}/latest.iso
-    HASH="$(web_pipe "${URL}/${ISO}.sha256" | cut_1)"
+    HASH="$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f1)"
     echo "${URL}/${ISO} ${HASH}"
 }
 

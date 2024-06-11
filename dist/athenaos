@@ -16,7 +16,7 @@ function dist_image() {
     local HASH=""
     local ISO="athena-rolling-x86_64.iso"
     local URL="https://github.com/Athena-OS/athena/releases/download/${RELEASE}"
-    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

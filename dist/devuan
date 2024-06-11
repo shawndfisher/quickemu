@@ -19,7 +19,7 @@ function dist_image() {
       daedalus) VER="5.0.0";;
     esac
     ISO="devuan_${RELEASE}_${VER}_amd64_desktop-live.iso"
-    HASH=$(web_pipe "${URL}/SHASUMS.txt" | grep "${ISO}" | cut_1)
+    HASH=$(web_pipe "${URL}/SHASUMS.txt" | grep "${ISO}" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

@@ -29,7 +29,7 @@ function dist_image() {
         URL="${URL/hybrid/cd}"
         ISO="${ISO/-live/}"
     fi
-    HASH=$(web_pipe "${URL}/SHA512SUMS" | grep "${ISO}" | cut_1 | head -1)
+    HASH=$(web_pipe "${URL}/SHA512SUMS" | grep "${ISO}" |  cut -d' ' -f1| head -1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

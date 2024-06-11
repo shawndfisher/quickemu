@@ -12,7 +12,7 @@ function dist_image() {
     local HASH=""
     local ISO="boron-1-240123-amd64.hybrid.iso"
     local URL="https://ddl.bunsenlabs.org/ddl"
-    HASH=$(web_pipe "${URL}/release.sha256.txt" | head -1 | cut_1)
+    HASH=$(web_pipe "${URL}/release.sha256.txt" | head -1 | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

@@ -20,7 +20,7 @@ function dist_image() {
         *Pure*) ARCH+="_64";;
     esac
     local URL="http://www.tinycorelinux.net/${RELEASE}.x/${ARCH}/release"
-    HASH=$(web_pipe "${URL}/${ISO}.md5.txt" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.md5.txt" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

@@ -11,7 +11,7 @@ function dist_releases() {
 function dist_image() {
     local ISO=$(web_pipe "https://api.github.com/repos/Vanilla-OS/live-iso/releases" | grep 'download_url' | grep "${RELEASE}" | head -1 | cut -d'"' -f4)
     local HASH_URL=$(echo "${ISO}" | sed s'|\.iso|\.sha256\.txt|g')
-    local HASH=$(web_pipe "${HASH_URL}" | cut_1)
+    local HASH=$(web_pipe "${HASH_URL}" | cut -d' ' -f1)
     echo "${ISO} ${HASH}"
 }
 

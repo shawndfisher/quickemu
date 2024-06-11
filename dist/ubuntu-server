@@ -35,11 +35,11 @@ function dist_image() {
     if web_check "${URL}/SHA256SUMS"; then
         DATA=$(web_pipe "${URL}/SHA256SUMS" | grep "${NAME}" | grep amd64 | grep iso)
         ISO=$(cut -d'*' -f2 <<<${DATA})
-        HASH=$(cut_1 <<<${DATA})
+        HASH=$(cut -d' ' -f1 <<<${DATA})
     else
         DATA=$(web_pipe "${URL}/MD5SUMS" | grep "${NAME}" | grep amd64 | grep iso)
         ISO=$(cut -d' ' -f3 <<<${DATA})
-        HASH=$(cut_1 <<<${DATA})
+        HASH=$(cut -d' ' -f1 <<<${DATA})
     fi
     # if [[ "${RELEASE}" == "daily"* ]] || [ "${RELEASE}" == "dvd" ]; then
     #     zsync_get "${URL}/${ISO}" "${VM_PATH}" "${OS}-devel.iso"

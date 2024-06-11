@@ -13,7 +13,7 @@ function dist_image() {
     local ISO=""
     local URL="https://files.kde.org/neon/images/${RELEASE}/current"
     ISO=$(web_pipe "${URL}/neon-${RELEASE}-current.sha256sum" | cut -d' ' -f3-)
-    HASH=$(web_pipe "${URL}/neon-${RELEASE}-current.sha256sum" | cut_1)
+    HASH=$(web_pipe "${URL}/neon-${RELEASE}-current.sha256sum" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

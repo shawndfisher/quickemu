@@ -15,7 +15,7 @@ function dist_image() {
     # Find EndeavourOS releases from mirror, pick one matching release
     local ENDEAVOUR_RELEASES="$(web_pipe "${URL}/" | grep -o -P '(?<=<a href=").*(?=.iso">)' | grep -v 'x86_64')"
     local ISO="$(echo "${ENDEAVOUR_RELEASES}" | grep -i "${RELEASE}").iso"
-    HASH=$(web_pipe "${URL}/${ISO}.sha512sum" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha512sum" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

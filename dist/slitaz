@@ -12,7 +12,7 @@ function dist_image() {
     local HASH=""
     local ISO="slitaz-rolling-${RELEASE}"
     local URL="http://mirror.slitaz.org/iso/rolling"
-    HASH=$(web_pipe "${URL}/${ISO}.md5" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.md5" | cut -d' ' -f1)
     echo "${URL}/${ISO}.iso ${HASH}"
 }
 

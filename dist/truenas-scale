@@ -15,7 +15,7 @@ function dist_image() {
     local URL=""
     local DLINFO="https://www.truenas.com/download-truenas-scale/"
     URL=$(web_pipe ${DLINFO} | grep -o "\"https://.*${RELEASE}.*\.iso\"" | cut -d'"' -f 2)
-    HASH=$(web_pipe "${URL}.sha256" | cut_1)
+    HASH=$(web_pipe "${URL}.sha256" | cut -d' ' -f1)
     echo "${URL} ${HASH}"
 }
 

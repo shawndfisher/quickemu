@@ -20,7 +20,7 @@ function dist_image() {
     local URL=""
     URL="https://dlc.openindiana.org/isos/hipster/${RELEASE}"
     ISO="OI-hipster-${EDITION}-${RELEASE}.iso"
-    HASH=$(web_pipe "${URL}/${ISO}.sha256" |cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

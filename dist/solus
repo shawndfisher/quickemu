@@ -16,7 +16,7 @@ function dist_image() {
     local HASH=""
     local ISO="Solus-${RELEASE}-${EDITION}.iso"
     local URL="https://downloads.getsol.us/isos/${RELEASE}"
-    HASH=$(web_pipe "${URL}/${ISO}.sha256sum" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha256sum" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

@@ -17,11 +17,11 @@ function dist_image() {
     case ${RELEASE} in
       1.2)
         ISO="FD12CD.iso"
-        HASH=$(web_pipe "${URL}/FD12.sha" | grep "${ISO}" | cut_1)
+        HASH=$(web_pipe "${URL}/FD12.sha" | grep "${ISO}" | cut -d' ' -f1)
         ;;
       1.3)
         ISO="FD13-LiveCD.zip"
-        HASH=$(web_pipe "${URL}/verify.txt" | grep -A 8 "sha256sum" | grep "${ISO}" | cut_1)
+        HASH=$(web_pipe "${URL}/verify.txt" | grep -A 8 "sha256sum" | grep "${ISO}" | cut -d' ' -f1)
         ;;
     esac
     echo "${URL}/${ISO} ${HASH}"

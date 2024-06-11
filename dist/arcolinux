@@ -16,7 +16,7 @@ function dist_image() {
     local HASH=""
     local ISO="arcolinux${EDITION:0:1}-${RELEASE}-x86_64.iso"
     local URL="https://mirror.accum.se/mirror/arcolinux.info/iso/${RELEASE}"
-    HASH=$(web_pipe "${URL}/${ISO}.sha1" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha1" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

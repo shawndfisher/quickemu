@@ -21,7 +21,7 @@ function dist_image() {
       KDE) ISO="MX-${RELEASE}_KDE_x64.iso";;
       Fluxbox) ISO="MX-${RELEASE}_fluxbox_x64.iso";;
     esac
-    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

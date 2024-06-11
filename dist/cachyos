@@ -16,7 +16,7 @@ function dist_image() {
     local URL="https://mirror.cachyos.org/ISO/${EDITION}/"
     local REL=$(web_pipe "${URL}" | grep -Po '(?<=">)[0-9]+(?=/</a>)' | sort -ru | tail -n 1)
     local ISO="cachyos-${EDITION}-linux-${REL}.iso"
-    local HASH=$(web_pipe "${URL}/${REL}/${ISO}.sha256" | cut_1)
+    local HASH=$(web_pipe "${URL}/${REL}/${ISO}.sha256" | cut -d' ' -f1)
     echo "${URL}/${REL}/${ISO} ${HASH}"
 }
 

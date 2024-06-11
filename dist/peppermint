@@ -33,7 +33,7 @@ function dist_image() {
       URL="${URL}/Mini"
       ;;
     esac
-    HASH=$(web_pipe "${URL}/${ISO}-sha512.checksum" | grep "${ISO}" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}-sha512.checksum" | grep "${ISO}" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

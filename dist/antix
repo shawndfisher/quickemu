@@ -33,7 +33,7 @@ function dist_image() {
         full-*) ISO="${ISO}_x64-full.iso";;
         net-*)  ISO="${ISO}-net_x64-net.iso";;
     esac
-    HASH=$(web_pipe "${URL}/${README}.txt" | grep "${ISO}" | cut_1 | head -1)
+    HASH=$(web_pipe "${URL}/${README}.txt" | grep "${ISO}" | cut -d' ' -f1 | head -1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

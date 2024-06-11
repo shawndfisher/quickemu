@@ -60,11 +60,11 @@ function dist_image() {
     if web_check "${URL}/SHA256SUMS"; then
         DATA=$(web_pipe "${URL}/SHA256SUMS" | grep 'desktop\|dvd\|install' | grep amd64 | grep iso | grep -v "+mac")
         ISO=$(cut -d'*' -f2 <<<${DATA} | sed '1q;d')
-        HASH=$(cut_1 <<<${DATA} | sed '1q;d')
+        HASH=$(cut -d' ' -f1 <<<${DATA} | sed '1q;d')
     else
         DATA=$(web_pipe "${URL}/MD5SUMS" | grep 'desktop\|dvd\|install' | grep amd64 | grep iso | grep -v "+mac")
         ISO=$(cut -d'*' -f2 <<<${DATA})
-        HASH=$(cut_1 <<<${DATA})
+        HASH=$(cut -d' ' -f1 <<<${DATA})
     fi
     if [ -z $ISO ] || [ -z $HASH ]; then
         echo "$(pretty_name $OS) ${RELEASE} is currently unavailable. Please select other OS/Release combination"

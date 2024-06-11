@@ -12,7 +12,7 @@ function dist_image() {
     local HASH=""
     local ISO="slackware64-${RELEASE}-install-dvd.iso"
     local URL="https://slackware.nl/slackware/slackware-iso/slackware64-${RELEASE}-iso"
-    HASH=$(web_pipe "${URL}/${ISO}.md5" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.md5" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

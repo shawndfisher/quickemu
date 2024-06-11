@@ -20,7 +20,7 @@ function dist_image() {
         REV="1010"
     fi
     local ISO="deepin-desktop-community-${REV}-amd64.iso"
-    HASH=$(web_pipe "${URL}/SHA256SUMS" | grep "${ISO}" | cut_1)
+    HASH=$(web_pipe "${URL}/SHA256SUMS" | grep "${ISO}" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

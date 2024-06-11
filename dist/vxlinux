@@ -12,7 +12,7 @@ function dist_image() {
     local HASH=""
     local ISO="vx-${RELEASE}.iso"
     local URL="https://github.com/VX-Linux/main/releases/download/${RELEASE}"
-    HASH=$(web_pipe "${URL}/vx-${RELEASE}.md5" | cut_1)
+    HASH=$(web_pipe "${URL}/vx-${RELEASE}.md5" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

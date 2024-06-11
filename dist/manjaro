@@ -38,7 +38,7 @@ function dist_image() {
     else
         URL=$(echo ${MANIFEST} | jq -r '.[] | select(.name|test("^manjaro-sway-.*[.]iso$")) | select(.name|contains("unstable")|not) | .url')
     fi
-    HASH=$(web_pipe "${URL}.sha512" | cut_1)
+    HASH=$(web_pipe "${URL}.sha512" | cut -d' ' -f1)
     echo "${URL} ${HASH}"
 }
 

@@ -22,7 +22,7 @@ function dist_image() {
       kde) ISO="triskel_${RELEASE}_amd64.iso";;
       sugar) ISO="trisquel-sugar_${RELEASE}_amd64.iso";;
     esac
-    HASH=$(web_pipe "${URL}/${ISO}.sha1" | grep "${ISO}" | cut_1)
+    HASH=$(web_pipe "${URL}/${ISO}.sha1" | grep "${ISO}" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 
