@@ -2,23 +2,21 @@
 
 PRETTY_NAME="9Front"
 HOMEPAGE="https://9front.org/"
+INFO="9Front|Plan 9|-|https://9front.org/|9front is a fork of Plan 9 started to remedy a perceived lack of devoted development resources inside Bell Labs, and has accumulated various fixes and improvements."
 
 GUEST="9front"
 
 function dist_releases() {
-    # sed 's/\"9FRONT \"\(.*\)\" RELEASED/\"9FRONT \\\"\1\\\" RELEASED/'
     echo latest
 }
 
 function dist_image() {
-    #| grep \"url\": | head -1 | cut -d' ' -f4 | cut -d',' -f1 | tr -d '"'
-
     local HASH=""
     local URL="https://9front.org/iso"
-    local ISO="$(wget -q -O- "${URL}" | grep "9front-.*.amd64.iso.gz\"" | cut -d'>' -f2 | cut -d'"' -f4)"
-    local HASH_URL="$(wget -q -O- "https://9front.org/" | grep "releases" | grep "http" | cut -d'"' -f2)"
+    local ISO="$(web_pipe "${URL}" | grep "9front-.*.amd64.iso.gz\"" | cut -d'>' -f2 | cut -d'"' -f4)"
+    local HASH_URL="$(web_pipe "https://9front.org/" | grep "releases" | grep "http" | cut -d'"' -f2)"
     
-    HASH="$(wget -q -O- "${HASH_URL}" | grep "9front-.*.amd64.iso.gz" | grep -v "href=" | cut -d' ' -f4)"
+    HASH="$(web_pipe "${HASH_URL}" | grep "9front-.*.amd64.iso.gz" | grep -v "href=" | cut -d' ' -f4)"
 
     echo "${URL}/${ISO} ${HASH}"
 }
