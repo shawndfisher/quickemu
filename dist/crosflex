@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Cros Fles"
-HOMEPAGE="https://crux.nu/"
-INFO="CRUX|Independent|-|https://crux.nu/|CRUX is a lightweight Linux distribution for the x86-64 architecture targeted at experienced Linux users."
+PRETTY_NAME="ChromeOS Flex"
+HOMEPAGE="https://chromeenterprise.google/intl/en_uk/os/chromeosflex/"
+INFO="ChromeOS Flex|Independent|-|https://chromeenterprise.google/intl/en_uk/os/chromeosflex/|ChromeOS Flex is a sustainable way to modernise devices that you already own."
 
 GUEST="cros"
 
