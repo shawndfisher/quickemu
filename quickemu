@@ -395,7 +395,7 @@ function configure_cpu() {
 
     case ${guest_os} in
         batocera|freedos|haiku|solaris) MACHINE_TYPE="pc";;
-        kolibrios|reactos)
+        fiwix|kolibrios|reactos)
             CPU="-cpu qemu32"
             MACHINE_TYPE="pc";;
         macos)
