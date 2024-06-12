@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="PeppermintOS"
-HOMEPAGE="https://peppermintos.com/"
-INFO="PeppermintOS|Debian,Devuan|-|https://peppermintos.com/|Provides a user with the opportunity to build the system that best fits their needs. While at the same time providing a functioning OS with minimum hassle out of the box."
+INFO="PeppermintOS|-|https://peppermintos.com/|Provides a user with the opportunity to build the system that best fits their needs. While at the same time providing a functioning OS with minimum hassle out of the box."
 
 function dist_releases() {
     echo latest
@@ -12,7 +10,7 @@ function dist_editions() {
     echo devuan-xfce devuan-gnome debian-xfce debian-gnome mini
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://sourceforge.net/projects/peppermintos/files/isos"

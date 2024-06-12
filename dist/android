@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Android x86"
-HOMEPAGE="https://www.android-x86.org/"
-INFO="Android x86|Independent|-|https://www.android-x86.org/|Port Android Open Source Project to x86 platform."
+INFO="Android x86|-|https://www.android-x86.org/|Port Android Open Source Project to x86 platform."
 
 function dist_releases() {
     echo 9.0 8.1 7.1
@@ -12,7 +10,7 @@ function dist_editions() {
     echo x86 x86_64
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local JSON_ALL=""

@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Netboot"
-HOMEPAGE="https://netboot.xyz"
-INFO="netboot.xyz|iPXE|-|https://netboot.xyz/|Your favorite operating systems in one place."
+INFO="netboot.xyz|-|https://netboot.xyz/|Your favorite operating systems in one place."
 
 function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="netboot.xyz.iso"
     local URL="https://boot.netboot.xyz/ipxe"

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Slax"
-HOMEPAGE="https://slax.org"
-INFO="Slax|Debian Slackware|-|https://www.slax.org/|Compact, fast, and modern Linux operating system that combines sleek design with modular approach. With the ability to run directly from a USB flash drive without the need for installation, Slax is truly portable and fits easily in your pocket."
+INFO="Slax|-|https://www.slax.org/|Compact, fast, and modern Linux operating system that combines sleek design with modular approach. With the ability to run directly from a USB flash drive without the need for installation, Slax is truly portable and fits easily in your pocket."
 
 function dist_releases() {
     echo latest
@@ -12,19 +10,17 @@ function dist_editions() {
     echo debian slackware
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL=""
     case ${EDITION} in
       debian)
         URL="https://ftp.fi.muni.cz/pub/linux/slax/Slax-12.x"
-        ISO=$(web_pipe "${URL}/md5.txt" | grep '64bit-' | cut -d' ' -f3 | tail -n1)
-        ;;
+        ISO=$(web_pipe "${URL}/md5.txt" | grep '64bit-' | cut -d' ' -f3 | tail -n1);;
       slackware)
         URL="https://ftp.fi.muni.cz/pub/linux/slax/Slax-15.x"
-        ISO=$(web_pipe "${URL}/md5.txt" | grep '64bit-' | cut -d' ' -f3 | tail -n1)
-        ;;
+        ISO=$(web_pipe "${URL}/md5.txt" | grep '64bit-' | cut -d' ' -f3 | tail -n1);;
     esac
     HASH=$(web_pipe "${URL}/md5.txt" | grep '64bit-' | cut -d' ' -f1 | tail -n1)
     echo "${URL}/${ISO} ${HASH}"

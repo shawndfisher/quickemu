@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Bunsenlabs"
-HOMEPAGE="https://bunsenlabs.org/"
-INFO="BunsenLabs|Debian|-|https://www.bunsenlabs.org/|Light-weight and easily customizable Openbox desktop. The project is a community continuation of CrunchBang Linux."
+INFO="BunsenLabs|-|https://www.bunsenlabs.org/|Light-weight and easily customizable Openbox desktop. The project is a community continuation of CrunchBang Linux."
 
 function dist_releases() {
     echo boron
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="boron-1-240123-amd64.hybrid.iso"
     local URL="https://ddl.bunsenlabs.org/ddl"

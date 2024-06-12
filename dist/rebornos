@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="RebornOS"
-HOMEPAGE="https://rebornos.org/"
-INFO="RebornOS|Arch|-|https://rebornos.org/|Aiming to make Arch Linux as user friendly as possible by providing interface solutions to things you normally have to do in a terminal."
+INFO="RebornOS|-|https://rebornos.org/|Aiming to make Arch Linux as user friendly as possible by providing interface solutions to things you normally have to do in a terminal."
 
 function dist_releases() {
     echo latest
 }
 
-function dist_image() {
-    local ISO=$(web_pipe "https://meta.cdn.soulharsh007.dev/RebornOS-ISO?format=json" | jq -r ".url")
-    local HASH=$(web_pipe "https://meta.cdn.soulharsh007.dev/RebornOS-ISO?format=json" | jq -r ".md5")
+function dist_image_get() {
+    local HASH=""
+    local ISO=""
+    ISO=$(web_pipe "https://meta.cdn.soulharsh007.dev/RebornOS-ISO?format=json" | jq -r ".url")
+    HASH=$(web_pipe "https://meta.cdn.soulharsh007.dev/RebornOS-ISO?format=json" | jq -r ".md5")
     echo "${ISO} ${HASH}"
 }
 

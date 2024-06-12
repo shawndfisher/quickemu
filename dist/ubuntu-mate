@@ -1,27 +1,26 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Ubuntu MATE"
-HOMEPAGE="https://ubuntu-mate.org/"
-INFO="Ubuntu MATE|Ubuntu|-|https://ubuntu-mate.org/|Stable, easy-to-use operating system with a configurable desktop environment. It is ideal for those who want the most out of their computers and prefer a traditional desktop metaphor. Using Mate desktop."
+INFO="Ubuntu MATE|-|https://ubuntu-mate.org/|Stable, easy-to-use operating system with a configurable desktop environment. It is ideal for those who want the most out of their computers and prefer a traditional desktop metaphor. Using Mate desktop."
 
 function dist_releases() {
-    local VERSION_DATA="$(IFS=$'\n' web_pipe https://api.launchpad.net/devel/ubuntu/series | jq -r '.entries[]')"
-    local SUPPORTED_VERSIONS=($(IFS=$'\n' jq -r 'select(.status=="Supported" or .status=="Current Stable Release") | .version' <<<${VERSION_DATA} | sort))
-    local EOL_VERSIONS=($(IFS=$'\n' jq -r 'select(.status=="Obsolete") | .version' <<<${VERSION_DATA} | sort))
+    local VERSION_DATA=""
+    local SUPPORTED_VERSIONS=()
+    VERSION_DATA="$(IFS=$'\n' web_pipe https://api.launchpad.net/devel/ubuntu/series | jq -r '.entries[]')"
+    # shellcheck disable=SC2207
+    SUPPORTED_VERSIONS=($(IFS=$'\n' jq -r 'select(.status=="Supported" or .status=="Current Stable Release") | .version' <<<"${VERSION_DATA}" | sort))
     case "${OS}" in
         ubuntu)
-            echo ${SUPPORTED_VERSIONS[@]} daily-live ${EOL_VERSIONS[@]/#/eol-};;
+            echo "${SUPPORTED_VERSIONS[@]}" daily-live;;
         kubuntu|lubuntu|ubuntukylin|ubuntu-mate|ubuntustudio|xubuntu)
             # after 16.04
-            echo ${SUPPORTED_VERSIONS[@]:1} daily-live ${EOL_VERSIONS[@]/#/eol-};;
+            echo "${SUPPORTED_VERSIONS[@]:1}" daily-live;;
         ubuntu-budgie)
             # after 18.04
-            echo ${SUPPORTED_VERSIONS[@]:2} daily-live ${EOL_VERSIONS[@]/#/eol-};;
+            echo "${SUPPORTED_VERSIONS[@]:2}" daily-live;;
         edubuntu|ubuntu-unity|ubuntucinnamon)
             # after 23.10
-            echo ${SUPPORTED_VERSIONS[@]:5} daily-live ${EOL_VERSIONS[@]/#/eol-};;
+            echo "${SUPPORTED_VERSIONS[@]:5}" daily-live;;
     esac
-
     if [[ "${RELEASE}" == "*.*" ]]; then
         local SHORT_RELEASE=${RELEASE//./}
         if [ "${SHORT_RELEASE}" -lt 1604 ]; then
@@ -30,19 +29,17 @@ function dist_releases() {
     fi
 }
 
-function dist_image() {
+function dist_image_get() {
     local ISO=""
     local HASH=""
     local URL=""
     local DATA=""
-    [[ $RELEASE = daily ]] && RELEASE=daily-live
+
     if [[ "${RELEASE}" == "daily"* ]] && [ "${OS}" == "ubuntustudio" ]; then
         # Ubuntu Studio daily-live images are in the dvd directory
         RELEASE="dvd"
     fi
-    if [[ "${RELEASE}" == "eol-"* ]]; then
-        URL="https://old-releases.ubuntu.com/releases/${RELEASE/eol-/}"
-    elif [[ "${RELEASE}" == "jammy-daily" ]]; then
+    if [[ "${RELEASE}" == "jammy-daily" ]]; then
         if [[ "${OS}" == "ubuntustudio" ]]; then
             URL="https://cdimage.ubuntu.com/${OS}/jammy/dvd/current"
         else
@@ -59,15 +56,15 @@ function dist_image() {
     fi
     if web_check "${URL}/SHA256SUMS"; then
         DATA=$(web_pipe "${URL}/SHA256SUMS" | grep 'desktop\|dvd\|install' | grep amd64 | grep iso | grep -v "+mac")
-        ISO=$(cut -d'*' -f2 <<<${DATA} | sed '1q;d')
-        HASH=$(cut -d' ' -f1 <<<${DATA} | sed '1q;d')
+        ISO=$(cut -d'*' -f2 <<<"${DATA}" | sed '1q;d')
+        HASH=$(cut -d' ' -f1 <<<"${DATA}" | sed '1q;d')
     else
         DATA=$(web_pipe "${URL}/MD5SUMS" | grep 'desktop\|dvd\|install' | grep amd64 | grep iso | grep -v "+mac")
-        ISO=$(cut -d'*' -f2 <<<${DATA})
-        HASH=$(cut -d' ' -f1 <<<${DATA})
+        ISO=$(cut -d'*' -f2 <<<"${DATA}")
+        HASH=$(cut -d' ' -f1 <<<"${DATA}")
     fi
-    if [ -z $ISO ] || [ -z $HASH ]; then
-        echo "$(pretty_name $OS) ${RELEASE} is currently unavailable. Please select other OS/Release combination"
+    if [ -z "${ISO}" ] || [ -z "${HASH}" ]; then
+        echo "$(pretty_name "${OS}") ${RELEASE} is currently unavailable. Please select other OS/Release combination"
         exit 1
     fi
     echo "${URL}/${ISO} ${HASH}"

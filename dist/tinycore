@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Tiny Core Linux"
-HOMEPAGE="https://www.tinycorelinux.net/"
-INFO="Tiny Core Linux|Independent|-|http://www.tinycorelinux.net/|Highly modular based system with community build extensions."
+INFO="Tiny Core Linux|-|http://www.tinycorelinux.net/|Highly modular based system with community build extensions."
 
 function dist_releases() {
     echo 15 14
@@ -12,7 +10,7 @@ function dist_editions() {
     echo Core TinyCore CorePlus CorePure64 TinyCorePure64
 }
 
-function dist_image() {
+function dist_image_get() {
     local ARCH="x86"
     local HASH=""
     local ISO="${EDITION}-${RELEASE}.0.iso"

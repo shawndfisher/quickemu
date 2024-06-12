@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Tuxedo OS"
-HOMEPAGE="https://www.tuxedocomputers.com/en/"
-INFO="Tuxedo OS|Ubuntu|-|https://www.tuxedocomputers.com/en/|KDE Ubuntu LTS designed to go with their Linux hardware."
+INFO="Tuxedo OS|-|https://www.tuxedocomputers.com/en/|KDE Ubuntu LTS designed to go with their Linux hardware."
 
 function dist_releases() {
     echo current
 }
 
-function dist_image() {
+function dist_image_get() {
+    local HASH=""
     local ISO=""
     local URL=""
-    local Current=
-    Current="$(web_pipe "https://os.tuxedocomputers.com/" | grep -m 1 current.iso | cut -d '=' -f 4 | cut -d '"' -f 2)"
-    URL="https://os.tuxedocomputers.com/${Current}"
-    HASH="$(web_pipe "https://os.tuxedocomputers.com/checksums/${Current}.sha256" | cut -d ' ' -f 1)"
-    echo "${URL} ${HASH}"
+    local URL="https://os.tuxedocomputers.com"
+    ISO="$(web_pipe "https://os.tuxedocomputers.com/" | grep -m 1 current.iso | cut -d '=' -f 4 | cut -d '"' -f 2)"
+    HASH="$(web_pipe "https://os.tuxedocomputers.com/checksums/${ISO}.sha256" | cut -d ' ' -f 1)"
+    echo "${URL}/${ISO} ${HASH}"
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

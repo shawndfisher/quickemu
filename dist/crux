@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Crux"
-HOMEPAGE="https://crux.nu/"
-INFO="CRUX|Independent|-|https://crux.nu/|CRUX is a lightweight Linux distribution for the x86-64 architecture targeted at experienced Linux users."
+INFO="CRUX|-|https://crux.nu/|CRUX is a lightweight Linux distribution for the x86-64 architecture targeted at experienced Linux users."
 
 function dist_releases() {
     echo $(web_pipe "http://ftp.morpheus.net/pub/linux/crux/" | grep "<a href=\"crux-" | cut -d"-" -f2 | cut -d"/" -f1 | sort -ru)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="crux-${RELEASE}.iso"
     local URL="http://ftp.morpheus.net/pub/linux/crux/crux-${RELEASE}/iso"

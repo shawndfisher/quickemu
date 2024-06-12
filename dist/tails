@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Tails"
-HOMEPAGE="https://tails.net/"
-INFO="Tails|Debian|-|https://tails.net/|Portable operating system that protects against surveillance and censorship."
+INFO="Tails|-|https://tails.net/|Portable operating system that protects against surveillance and censorship."
 
 function dist_releases() {
     echo stable
 }
 
-function dist_image() {
+function dist_image_get() {
     local JSON=""
     local HASH=""
     local URL=""

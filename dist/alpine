@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Alpine Linux"
-HOMEPAGE="https://alpinelinux.org/"
-INFO="Alpine Linux|Independent|-|https://alpinelinux.org/|Security-oriented, lightweight Linux distribution based on musl libc and busybox."
+INFO="Alpine Linux|-|https://alpinelinux.org/|Security-oriented, lightweight Linux distribution based on musl libc and busybox."
 
 function dist_releases() {
     local REL=""
@@ -14,7 +12,7 @@ function dist_releases() {
     done
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://dl-cdn.alpinelinux.org/alpine/${RELEASE}/releases/x86_64"

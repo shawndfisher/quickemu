@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Spiral"
-HOMEPAGE="https://spirallinux.github.io/"
-INFO="SpiralLinux|Debian|-|https://spirallinux.github.io/|Selection of Linux spins built from Debian GNU/Linux, with a focus on simplicity and out-of-the-box usability across all the major desktop environments."
+INFO="SpiralLinux|-|https://spirallinux.github.io/|Selection of Linux spins built from Debian GNU/Linux, with a focus on simplicity and out-of-the-box usability across all the major desktop environments."
 
 function dist_releases() {
     echo latest
@@ -12,7 +10,7 @@ function dist_editions() {
     echo Plasma XFCE Mate LXQt Gnome Budgie Cinnamon Builder
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="SpiralLinux_${EDITION}_12.231005_x86-64.iso"
     local URL="https://sourceforge.net/projects/spirallinux/files/12.231005"

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="ReactOS"
-HOMEPAGE="https://reactos.org/"
-INFO="ReactOS|Independent|-|https://reactos.org/|Imagine running your favorite Windows applications and drivers in an open-source environment you can trust."
+INFO="ReactOS|-|https://reactos.org/|Imagine running your favorite Windows applications and drivers in an open-source environment you can trust."
 
 GUEST="reactos"
 
@@ -10,21 +8,25 @@ function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
-    local URL="https://sourceforge.net/projects/reactos/files/latest/download"
+    local URL=""
+    URL="$(web_redirect "https://sourceforge.net/projects/reactos/files/latest/download")"
     echo "${URL} ${HASH}"
+}
+
+function dist_image_post_get() {
+    if [[ ${ISO} = *".zip"* ]]; then
+        unzip -qo "${VM_PATH}/${ISO}" -d "${VM_PATH}"
+        rm -f "${VM_PATH}/${ISO}"
+        ISO="$(ls -1 "${VM_PATH}/"*.iso)"
+    fi
 }
 
 function dist_vm_option_tweak() {
     echo "boot=\"legacy\"" >> "${CONF_FILE}"
     echo "disk_size=\"12G\"" >> "${CONF_FILE}"
     echo "ram=\"2048M\"" >> "${CONF_FILE}"
-}
-
-function dist_image_handle() {
-    unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
-    ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.zip')
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

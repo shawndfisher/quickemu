@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Nitrux"
-HOMEPAGE="https://nxos.org/"
-INFO="Nitrux|Debian|-|https://nxos.org/|Powered by Debian, KDE Plasma and Frameworks, and AppImages."
+INFO="Nitrux|-|https://nxos.org/|Powered by Debian, KDE Plasma and Frameworks, and AppImages."
 
 function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URLBASE=""
     local URL=""

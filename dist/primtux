@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="PrimTux"
-HOMEPAGE="https://primtux.fr/"
-INFO="PrimTux|Ubuntu|-|https://primtux.fr/|A complete and customizable GNU/Linux operating system intended for primary school students and suitable even for older hardware."
+INFO="PrimTux|-|https://primtux.fr/|A complete and customizable GNU/Linux operating system intended for primary school students and suitable even for older hardware."
 
 function dist_releases() {
     echo 7
@@ -12,7 +10,7 @@ function dist_editions() {
     echo 2022-10
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL=""
     local ISO=""

@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="#!++"
-HOMEPAGE="https://www.crunchbangplusplus.org/"
-INFO="#!++|Debian|-|https://www.crunchbangplusplus.org/|The classic minimal crunchbang feel, now with debian 12 bookworm."
+INFO="#!++|-|https://www.crunchbangplusplus.org/|The classic minimal crunchbang feel, now with debian 12 bookworm."
 
 function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://api.github.com/repos/CBPP/cbpp/releases" | grep 'download_url' | cut -d'-' -f2 | grep '^[0-9]' | sort -gru)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
-    local ISO=$(web_pipe "https://api.github.com/repos/CBPP/cbpp/releases" | grep 'download_url' | grep amd64 | grep "${RELEASE}" | cut -d'"' -f4)
-    echo "${URL} ${HASH}"
+    local ISO=""
+    ISO=$(web_pipe "https://api.github.com/repos/CBPP/cbpp/releases" | grep 'download_url' | grep amd64 | grep "${RELEASE}" | cut -d'"' -f4)
+    echo "${ISO} ${HASH}"
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Windows"
-HOMEPAGE="https://www.microsoft.com/en-us/windows/"
-INFO="Windows|proprietary|-|https://www.microsoft.com/en-us/windows/|Whether you’re gaming, studying, running a business, or running a household, Windows helps you get it done."
+INFO="Windows|-|https://www.microsoft.com/en-us/windows/|Whether you’re gaming, studying, running a business, or running a household, Windows helps you get it done."
 
 # This distribution file is adapted from the Mido project: https://github.com/ElliotKillick/Mido
 # Download newer consumer Windows versions from behind gated Microsoft API
 #
 # 06/04/2024: Use STDERR to output operational details
-#             Add pre_dist_image to generate unattended iso and grab virtio drivers
+#             Add dist_image_pre_get to generate unattended iso and grab virtio drivers
 #             Remove curl_windows & error handling (rely on quickget's web_get routine)
 #             *** Reminder to self, test behind VPN so your IP doesn't get blacklisted
 #
@@ -416,7 +414,7 @@ function download_windows_workstation() {
     echo "$iso_download_link"
 }
 
-function dist_image() {
+function dist_image_get() {
     local URL=""
     local ISO=""
 
@@ -440,7 +438,7 @@ function dist_image() {
     fi
 }
 
-function pre_dist_image() {
+function dist_image_pre_get() {
     if [ ! -f "${VM_PATH}/unattended.iso" ]; then
         case ${RELEASE} in
           10|11)

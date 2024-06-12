@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="OpenIndiana"
-HOMEPAGE="https://www.openindiana.org/"
-INFO="OpenIndiana|Solaris,OpenSolaris|-|https://www.openindiana.org/|Community supported illumos-based operating system."
+INFO="OpenIndiana|-|https://www.openindiana.org/|Community supported illumos-based operating system."
 
 GUEST="solaris"
 
 function dist_releases() {
-    echo $(web_pipe "https://dlc.openindiana.org/isos/hipster/" | grep link | cut -d'/' -f 1 | cut -d '"' -f4 | sort -r | tail +2 | head -n 5)
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://dlc.openindiana.org/isos/hipster/" | grep link | cut -d'/' -f 1 | cut -d '"' -f4 | sort -r | tail -n +2 | head -n 5)
 }
 
 function dist_editions() {
     echo gui text minimal
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL=""

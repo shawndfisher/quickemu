@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="LXLE"
-HOMEPAGE="https://lxle.net/"
+INFO="LXLE|-|https://lxle.net/|Security-oriented, lightweight Linux distribution based on musl libc and busybox."
 
 function dist_releases() {
     echo focal
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
-    local URL="https://sourceforge.net/projects/lxle/files/Final/OS/${RELEASE^}-64"
-    local ISO="LXLE-${RELEASE^}-Release.iso"
-    
+    local URL=""
+    local ISO=""
+    URL="https://sourceforge.net/projects/lxle/files/Final/OS/${RELEASE^}-64"
+    ISO="LXLE-${RELEASE^}-Release.iso"
     HASH="$(wget -q -O- "${URL}/${ISO}.md5" | cut -d' ' -f1)"
-
     echo "${URL}/${ISO} ${HASH}"
 }
 

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Essence"
-HOMEPAGE="https://nakst.gitlab.io/essence"
-INFO="Essence|Independent|-|https://nakst.gitlab.io/essence|A desktop operating system built from scratch, for control and simplicity."
+INFO="Essence|-|https://nakst.gitlab.io/essence|A desktop operating system built from scratch, for control and simplicity."
 
 GUEST="essence"
 IMAGE_TYPE="img"
@@ -11,7 +9,7 @@ function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local TMPURL="$(curl -Ls -o /dev/null -w %{url_effective} https://github.com/nakst/build-essence/releases/${RELEASE})"
     local HASH=""
     local URL="${TMPURL//\/tag\//\/download\/}"
@@ -19,16 +17,16 @@ function dist_image() {
     echo "${URL}/${ISO}"
 }
 
-function dist_vm_option_tweak() {
-    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-}
-
-function dist_image_handle() {
+function dist_image_post_get() {
     tar --strip-components=1 -xJf ${VM_PATH}/${ISO} -C ${VM_PATH}
     qemu-img create -f qcow2 "${VM_PATH}/disk.qcow2" 1G
     rm -f "${VM_PATH}/Essence.ova" "${VM_PATH}/Essence.tar.xz"
     mv "${VM_PATH}/drive" "${VM_PATH}/essence.img"
     ISO="essence.img"
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

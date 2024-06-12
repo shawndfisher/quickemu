@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Icaros"
-HOMEPAGE="https://vmwaros.blogspot.com/"
-INFO="Icaros|Independent|-|https://vmwaros.blogspot.com/|Icaros Desktop is an Amiga-like operating system for the PC platform, with a full desktop environment, distributed on a bootable media."
+INFO="Icaros|-|https://vmwaros.blogspot.com/|Icaros Desktop is an Amiga-like operating system for the PC platform, with a full desktop environment, distributed on a bootable media."
 
 GUEST="icaros"
 
@@ -14,7 +12,7 @@ function dist_editions() {
     echo light live
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL="http://www.icarosdesktop.com/icarosfiles"
     local ISO="Icaros${EDITION^}_${RELEASE//./_}.zip"
@@ -63,13 +61,13 @@ function dist_image() {
     echo "${URL}"/"${ISO}" "${HASH}"
 }
 
-function dist_vm_option_tweak() {
-    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-}
-
-function dist_image_handle() {
+function dist_image_post_get() {
     unzip -j ${VM_PATH}/${ISO} -d ${VM_PATH}
     ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.zip')
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

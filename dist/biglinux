@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="BigLinux"
-HOMEPAGE="https://ww.biglinux.com.br/"
-INFO="BigLinux|unknown|-|https://www.biglinux.com.br/|Is the right choice if you want to have an easy and enriching experience with Linux. It has been perfected over more than 19 years, following our motto: 'In search of the perfect system'."
+INFO="BigLinux|-|https://www.biglinux.com.br/|Is the right choice if you want to have an easy and enriching experience with Linux. It has been perfected over more than 19 years, following our motto: 'In search of the perfect system'."
 
 function dist_releases() {
-    echo $(web_pipe "https://iso.biglinux.com.br" | grep -Eo 'biglinux_[0-9]{4}(-[0-9]{2}){2}_k[0-9]{2,3}.iso' | cut -d'_' -f2 | sort -ru | head -1)
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://iso.biglinux.com.br" | grep -Eo 'biglinux_[0-9]{4}(-[0-9]{2}){2}_k[0-9]{2,3}.iso' | cut -d'_' -f2 | sort -ru | head -n 1)
 }
 
 function dist_editions() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://iso.biglinux.com.br" | grep -Eo "biglinux_$(dist_releases)_k[0-9]{2,3}.iso" | cut -d'_' -f3 | cut -d'.' -f1 | sort -Vru)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="biglinux_${RELEASE}_${EDITION}.iso"
     local URL="https://iso.biglinux.com.br"

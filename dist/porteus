@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Porteus"
-HOMEPAGE="https://www.porteus.org/"
-INFO="Porteus|Slackware|-|http://www.porteus.org/|Complete linux operating system that is optimized to run from CD, USB flash drive, hard drive, or other bootable storage media."
+INFO="Porteus|-|http://www.porteus.org/|Complete linux operating system that is optimized to run from CD, USB flash drive, hard drive, or other bootable storage media."
 
 function dist_releases() {
     echo 5.01 5.0
@@ -12,7 +10,7 @@ function dist_editions() {
     echo cinnamon gnome kde lxde lxqt mate openbox xfce
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL=""

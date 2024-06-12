@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Gentoo"
-HOMEPAGE="https://www.gentoo.org/"
-INFO="Gentoo|Independent|-|https://www.gentoo.org/|Highly flexible, source-based Linux distribution."
+INFO="Gentoo|-|https://www.gentoo.org/|Highly flexible, source-based Linux distribution."
 
 function dist_releases() {
     echo latest
@@ -12,7 +10,7 @@ function editions_gentoo() {
     echo minimal livegui
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://mirror.bytemark.co.uk/gentoo/releases/amd64/autobuilds"

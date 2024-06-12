@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="MX Linux"
-HOMEPAGE="https://mxlinux.org/"
-INFO="MX Linux|Debian,Antix|-|https://mxlinux.org/|Designed to combine elegant and efficient desktops with high stability and solid performance."
+INFO="MX Linux|-|https://mxlinux.org/|Designed to combine elegant and efficient desktops with high stability and solid performance."
 
 function dist_releases() {
     echo 23.3 23.2
@@ -12,7 +10,7 @@ function dist_editions() {
     echo Xfce KDE Fluxbox
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://sourceforge.net/projects/mx-linux/files/Final/${EDITION}"

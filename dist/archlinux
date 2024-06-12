@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Arch Linux"
-HOMEPAGE="https://www.archlinux.org"
-INFO="Arch Linux|Independent|-|https://archlinux.org/|Lightweight and flexible Linux® distribution that tries to Keep It Simple."
+INFO="Arch Linux|-|https://archlinux.org/|Lightweight and flexible Linux® distribution that tries to Keep It Simple."
 
 function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://mirror.rackspace.com/archlinux"

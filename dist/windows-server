@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Windows"
-HOMEPAGE="https://www.microsoft.com/en-us/windows/"
-INFO="Windows Server|proprietary|-|https://www.microsoft.com/en-us/windows-server/|Platform for building an infrastructure of connected applications, networks, and web services."
+INFO="Windows Server|-|https://www.microsoft.com/en-us/windows-server/|Platform for building an infrastructure of connected applications, networks, and web services."
 
 GUEST="windows-server"
 
@@ -522,7 +520,7 @@ function download_windows_server() {
     OS="windows-server"
 }
 
-function dist_image() {
+function dist_image_get() {
     if [ "${RELEASE}" == "10-ltsc" ]; then
         download_windows_workstation windows-10-enterprise ltsc
     elif [ "${OS}" == "windows-server" ]; then

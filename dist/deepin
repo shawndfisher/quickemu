@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Deepin"
-HOMEPAGE="https://www.deepin.org"
-INFO="Deepin|Debian|-|https://www.deepin.org/|Beautiful UI design, intimate human-computer interaction, and friendly community environment make you feel at home."
+INFO="Deepin|-|https://www.deepin.org/|Beautiful UI design, intimate human-computer interaction, and friendly community environment make you feel at home."
 
 function dist_releases() {
-    echo $(web_pipe "https://cdimage.deepin.com/releases/" | grep "href=" | cut -d'"' -f2 | grep -v "\.\." | grep -v nightly | grep -v preview | sed 's|/||g' | sort -r)
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://cdimage.deepin.com/releases/" | grep "href=" | cut -d'"' -f2 | grep -v "\.\." | grep -v nightly | grep -v preview | sed 's|/||g' | tail -n 10 | sort -r)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local REV=${RELEASE}
     # deepin-desktop-community-20.3-amd64.iso

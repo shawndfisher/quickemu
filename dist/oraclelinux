@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Oracle Linux"
-HOMEPAGE="https://www.oracle.com/linux/"
-INFO="Oracle Linux|RedHat|-|https://www.oracle.com/linux/|Linux with everything required to deploy, optimize, and manage applications on-premises, in the cloud, and at the edge."
+INFO="Oracle Linux|-|https://www.oracle.com/linux/|Linux with everything required to deploy, optimize, and manage applications on-premises, in the cloud, and at the edge."
 
 function dist_releases() {
     # 9.0 8.6 8.5 8.4 missing 
     echo 9.3 9.2 9.1 8.9 8.8 8.7 7.9 7.8 7.7
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local VER_MAJ=${RELEASE::1}

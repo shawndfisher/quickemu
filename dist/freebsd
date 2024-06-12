@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="FreeBSD"
-HOMEPAGE="https://www.freebsd.org"
-INFO="FreeBSD|Independent|-|https://www.freebsd.org/|Operating system used to power modern servers, desktops, and embedded platforms."
+INFO="FreeBSD|-|https://www.freebsd.org/|Operating system used to power modern servers, desktops, and embedded platforms."
 
 GUEST="freebsd"
 
 function dist_releases() {
-    echo $(web_pipe "https://download.freebsd.org/ftp/releases/amd64/amd64/ISO-IMAGES/" |grep -e 'class="link"' |grep -v '\.\.'|cut -d\" -f4|tr -d '/' | sort -r)
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://download.freebsd.org/ftp/releases/amd64/amd64/ISO-IMAGES/" | grep -e 'class="link"' | grep -v '\.\.' | cut -d\" -f 4 | grep -v "14.1" | tr -d '/' | sort -r)
 }
 
 function dist_editions() {
     echo disc1 dvd1
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="FreeBSD-${RELEASE}-RELEASE-amd64-${EDITION}.iso"
     local URL="https://download.freebsd.org/ftp/releases/amd64/amd64/ISO-IMAGES/${RELEASE}"

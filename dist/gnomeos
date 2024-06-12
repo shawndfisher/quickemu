@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="GNOME OS"
-HOMEPAGE="https://os.gnome.org/"
-INFO="GNOME OS|Independent|-|https://os.gnome.org/|Alpha nightly bleeding edge distro of GNOME"
+INFO="GNOME OS|-|https://os.gnome.org/|Alpha nightly bleeding edge distro of GNOME"
 
-function releases_gnomeos() {
-    echo "nightly" $(web_pipe "https://download.gnome.org/gnomeos/" | grep -o -P '(?<=<a href=").*(?=/" title=")' | sort -nr)
+function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
+    echo "nightly" $(web_pipe "https://download.gnome.org/gnomeos/" | grep "title=" | awk -F'"' '{print $4}' | tr -d '/' | sort -nr)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="gnome_os_installer_${RELEASE}.iso"
     local URL="https://download.gnome.org/gnomeos/${RELEASE}"

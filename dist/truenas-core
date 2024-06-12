@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="TrueNAS Core"
-HOMEPAGE="https://www.truenas.com/truenas-core/"
-INFO="TrueNAS Core|FreeBSD|-|https://www.truenas.com/truenas-core/|World’s most popular storage OS because it gives you the power to build your own professional-grade storage system to use in a variety of data-intensive applications without any software costs."
+INFO="TrueNAS Core|-|https://www.truenas.com/truenas-core/|World’s most popular storage OS because it gives you the power to build your own professional-grade storage system to use in a variety of data-intensive applications without any software costs."
 
 GUEST="truenas"
 
@@ -10,17 +8,21 @@ function dist_releases() {
     echo 13
 }
 
-function dist_image() {
+function dist_image_get() {
     local ISO=""
     local URL=""
     local DLINFO="https://www.truenas.com/download-truenas-core/"
-    URL=$(web_pipe ${DLINFO} | grep -o "\"https://.*${RELEASE}.*\.iso\"" | cut -d'"' -f 2)
+    URL=$(web_pipe ${DLINFO} | grep -o "\"https://.*${RELEASE}.*\.iso\"" | cut -d'"' -f2)
     HASH=$(web_pipe "${URL}".sha256 | cut -d' ' -f1)
     echo "${URL} ${HASH}"
 }
 
 function dist_vm_option_tweak() {
     echo "boot=\"legacy\"" >> "${CONF_FILE}"
+    # the rest is non-functional
+    # echo "bootdrive_size=\"5G\"" >> "${CONF_FILE}" # boot drive
+    # echo "1stdrive_size=\"20G\"" >> "${CONF_FILE}" # for testing
+    # echo "2nddrive_size=\"20G\"" >> "${CONF_FILE}" # again, for testing
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

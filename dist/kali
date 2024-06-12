@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Kali"
-HOMEPAGE="https://www.kali.org/"
-INFO="Kali|Debian|-|https://www.kali.org/|The most advanced Penetration Testing Distribution."
+INFO="Kali|-|https://www.kali.org/|The most advanced Penetration Testing Distribution."
 
 function dist_releases() {
     echo current kali-weekly
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://cdimage.kali.org/${RELEASE}"

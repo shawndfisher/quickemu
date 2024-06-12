@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Chimera Linux"
-HOMEPAGE="https://chimera-linux.org/"
-INFO="Chimera Linux|Independent|anon:chimera root:chimera|https://chimera-linux.org/|Modern, general-purpose non-GNU Linux distribution."
+INFO="Chimera Linux|anon:chimera root:chimera|https://chimera-linux.org/|Modern, general-purpose non-GNU Linux distribution."
 
 function dist_releases() {
     echo latest
@@ -12,11 +10,13 @@ function dist_editions() {
     echo base gnome
 }
 
-function dist_image() {
+function dist_image_get() {
+    local DATE=""
+    local HASH=""
     local URL="https://repo.chimera-linux.org/live/${RELEASE}"
-    local DATE=$(web_pipe "${URL}/sha256sums.txt" | head -n1 | cut -d'-' -f5)
+    DATE=$(web_pipe "${URL}/sha256sums.txt" | head -n1 | cut -d'-' -f5)
     local ISO="chimera-linux-x86_64-LIVE-${DATE}-${EDITION}.iso"
-    local HASH=$(web_pipe "${URL}/sha256sums.txt" | grep 'x86_64-LIVE' | grep "${EDITION}" | cut -d' ' -f1)
+    HASH=$(web_pipe "${URL}/sha256sums.txt" | grep 'x86_64-LIVE' | grep "${EDITION}" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

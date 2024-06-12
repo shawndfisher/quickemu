@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Mageia"
-HOMEPAGE="https://www.mageia.org/"
-INFO="Mageia|Independent|-|https://www.mageia.org/|Stable, secure operating system for desktop & server."
+INFO="Mageia|-|https://www.mageia.org/|Stable, secure operating system for desktop & server."
 
 function dist_releases() {
     echo 9 8
@@ -12,7 +10,7 @@ function dist_editions() {
     echo Plasma GNOME Xfce
 }
 
-function dist_image() {
+function dist_image_get() {
     local ISO=$(web_pipe https://www.mageia.org/en/downloads/get/?q="Mageia-${RELEASE}-Live-${EDITION}-x86_64.iso" | grep 'click here'| grep -o 'href=.*\.iso'|cut -d\" -f2)
     local HASH=$(web_pipe "${ISO}.sha512" | cut -d' ' -f1)
     echo "${ISO} ${HASH}"

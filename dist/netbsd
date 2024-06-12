@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="NetBSD"
-HOMEPAGE="https://www.netbsd.org"
-INFO="NetBSD|Independent|-|https://www.netbsd.org/|Free, fast, secure, and highly portable Unix-like Open Source operating system. It is available for a wide range of platforms, from large-scale servers and powerful desktop systems to handheld and embedded devices."
+INFO="NetBSD|-|https://www.netbsd.org/|Free, fast, secure, and highly portable Unix-like Open Source operating system. It is available for a wide range of platforms, from large-scale servers and powerful desktop systems to handheld and embedded devices."
 
 GUEST="netbsd"
 
 function dist_releases() {
     # V8 is EOL so filter it out
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "http://cdn.netbsd.org/pub/NetBSD/iso/" | grep -o -E '"[[:digit:]]+\.[[:digit:]]+/"' | tr -d '"/' | grep -v ^8 | sort -nr)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="NetBSD-${RELEASE}-amd64.iso"
     local URL="https://cdn.netbsd.org/pub/NetBSD/NetBSD-${RELEASE}/images"

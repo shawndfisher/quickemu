@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Bodhi"
-HOMEPAGE="https://www.bodhilinux.com/"
-INFO="Bodhi|Debian,Ubuntu|-|https://www.bodhilinux.com/|Lightweight distribution featuring the fast & fully customizable Moksha Desktop."
+INFO="Bodhi|-|https://www.bodhilinux.com/|Lightweight distribution featuring the fast & fully customizable Moksha Desktop."
 
 function dist_releases() {
     echo 7.0.0
@@ -12,7 +10,7 @@ function dist_editions() {
     echo standard hwe s76
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://sourceforge.net/projects/bodhilinux/files/${RELEASE}"
@@ -22,7 +20,6 @@ function dist_image() {
     esac
     HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
-
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

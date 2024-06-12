@@ -1,30 +1,32 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Batocera"
-HOMEPAGE="https://batocera.org"
-INFO="Batocera|Independent|-|https://batocera.org/|Retro-gaming distribution with the aim of turning any computer/nano computer into a gaming console during a game or permanently."
+INFO="Batocera|-|https://batocera.org/|Retro-gaming distribution with the aim of turning any computer/nano computer into a gaming console during a game or permanently."
 
 GUEST="batocera"
 IMAGE_TYPE="img"
 
 function dist_releases() {
-    echo $(web_pipe "https://mirrors.o2switch.fr/batocera/x86_64/stable/" | grep ^\<a | cut -d'"' -f2 | cut -d '/' -f1 | grep -v '\.' | sort -ru | tail +2 | head -n 5)
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://mirrors.o2switch.fr/batocera/x86_64/stable/" | grep ^\<a | cut -d'"' -f2 | cut -d '/' -f1 | grep -v '\.' | sort -ru | tail -n +2 | head -n 5)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
+    local ISO=""
     local URL="https://mirrors.o2switch.fr/batocera/x86_64/stable/${RELEASE}"
-    local ISO="$(web_pipe "${URL}/" | grep -e 'batocera.*img.gz' | cut -d'"' -f2)"
+    ISO="$(web_pipe "${URL}/" | grep -e 'batocera.*img.gz'| cut -d'"' -f2)"
     echo "${URL}/${ISO} ${HASH}"
+}
+
+function dist_image_post_get() {
+    if [[ ${ISO} = *".gz"* ]]; then
+        gzip -d "${VM_PATH}/${ISO}"
+        ISO="${ISO/.gz/}"
+    fi
 }
 
 function dist_vm_option_tweak() {
     echo "disk_size=\"8G\"" >> "${CONF_FILE}"
-}
-
-function dist_image_handle() {
-    gzip -d "${VM_PATH}/${ISO}"
-    ISO="${ISO/.gz/}"
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="9Front"
-HOMEPAGE="https://9front.org/"
-INFO="9Front|Plan 9|-|https://9front.org/|9front is a fork of Plan 9 started to remedy a perceived lack of devoted development resources inside Bell Labs, and has accumulated various fixes and improvements."
+INFO="9Front|-|https://9front.org/|9front is a fork of Plan 9 started to remedy a perceived lack of devoted development resources inside Bell Labs, and has accumulated various fixes and improvements."
 
 GUEST="9front"
 
@@ -10,7 +8,7 @@ function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL="https://9front.org/iso"
     local ISO="$(web_pipe "${URL}" | grep "9front-.*.amd64.iso.gz\"" | cut -d'>' -f2 | cut -d'"' -f4)"
@@ -21,7 +19,7 @@ function dist_image() {
     echo "${URL}/${ISO} ${HASH}"
 }
 
-function dist_image_handle() {
+function dist_image_post_get() {
     gzip -d ${VM_PATH}/${ISO}
     ISO="${ISO/.gz/}"
 }

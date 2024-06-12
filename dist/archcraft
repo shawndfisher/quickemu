@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Archcraft"
-HOMEPAGE="https://www.archcraft.io"
-INFO="Archcraft|Arch|-|https://archcraft.io/|Yet another minimal Linux distribution, based on Arch Linux."
+INFO="Archcraft|-|https://archcraft.io/|Yet another minimal Linux distribution, based on Arch Linux."
 
 function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL=""
     URL="https://sourceforge.net/projects/archcraft/files/${RELEASE}/download"

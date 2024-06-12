@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="KolibriOS"
-HOMEPAGE="https://kolibrios.org/en/"
-INFO="KolibriOS|Independent|-|http://kolibrios.org/en/|Tiny yet incredibly powerful and fast operating system."
+INFO="KolibriOS|-|http://kolibrios.org/en/|Tiny yet incredibly powerful and fast operating system."
 
 GUEST="kolibrios"
 
@@ -10,7 +8,7 @@ function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="kolibri.iso"
     local URL="https://builds.kolibrios.org/eng"

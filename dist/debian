@@ -1,35 +1,43 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Debian"
-HOMEPAGE="https://www.debian.org/"
-INFO="Debian|Independent|-|https://www.debian.org/|Complete Free Operating System with perfect level of ease of use and stability."
+INFO="Debian|-|https://www.debian.org/|Complete Free Operating System with perfect level of ease of use and stability."
 
 function dist_releases() {
+    local ARCHIVE=""
+    local MAJ=""
     local NEW=""
     local OLD=""
     NEW=$(web_pipe "https://cdimage.debian.org/debian-cd/" | grep '\.[0-9]/' | cut -d'>' -f 9 | cut -d'/' -f 1)
-    OLD=$(web_pipe "https://cdimage.debian.org/cdimage/archive/" | grep -e '>[1-9][0-9]\.' | grep -v 'live' | grep -v NEVER | cut -d'>' -f 9 | cut -d'/' -f 1 | tac | head -20)
-    echo ${NEW} ${OLD}
+    echo -n "${NEW}"
+    MAJ=$(echo "${NEW}" | cut -d'.' -f 1)
+    ARCHIVE="$(web_pipe "https://cdimage.debian.org/cdimage/archive/" | grep folder | grep -v NEVER | cut -d'"' -f 6)"
+    for i in {1..2}; do
+        CUR=$((MAJ - i))
+        OLD=$(grep ^"${CUR}"  <<< "${ARCHIVE}" | tail -n 1 | tr -d '/')
+        echo -n " ${OLD}"
+    done
+    echo
 }
 
 function dist_editions() {
     echo standard cinnamon gnome kde lxde lxqt mate xfce netinst
 }
 
-function dist_image() {
+function dist_image_get() {
+    local DEBCURRENT=""
     local HASH=""
     local ISO="debian-live-${RELEASE}-amd64-${EDITION}.iso"
     local URL="https://cdimage.debian.org/cdimage/archive/${RELEASE}-live/amd64/iso-hybrid"
-    local DEBCURRENT=$(web_pipe "https://cdimage.debian.org/debian-cd/" | grep '\.[0-9]/' | cut -d'>' -f 9 | cut -d'/' -f 1)
+    DEBCURRENT=$(web_pipe "https://cdimage.debian.org/debian-cd/" | grep '\.[0-9]/' | cut -d'>' -f 9 | cut -d'/' -f 1)
     case "${RELEASE}" in
-      "${DEBCURRENT}") URL="https://cdimage.debian.org/debian-cd/${RELEASE}-live/amd64/iso-hybrid";;
+        "${DEBCURRENT}") URL="https://cdimage.debian.org/debian-cd/${RELEASE}-live/amd64/iso-hybrid";;
     esac
     if [ "${EDITION}" == "netinst" ]; then
         URL="${URL/-live/}"
         URL="${URL/hybrid/cd}"
         ISO="${ISO/-live/}"
     fi
-    HASH=$(web_pipe "${URL}/SHA512SUMS" | grep "${ISO}" |  cut -d' ' -f1| head -1)
+    HASH=$(web_pipe "${URL}/SHA512SUMS" | grep "${ISO}" | cut -d' ' -f1 | head -n 1)
     echo "${URL}/${ISO} ${HASH}"
 }
 

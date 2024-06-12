@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="SliTaz"
-HOMEPAGE="https://slitaz.org/en/"
-INFO="SliTaz|Independent|-|https://www.slitaz.org/en/|Simple, fast and low resource Linux OS for servers & desktops."
+INFO="SliTaz|-|https://www.slitaz.org/en/|Simple, fast and low resource Linux OS for servers & desktops."
 
 function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "http://mirror.slitaz.org/iso/rolling/" | grep "class='iso'" | cut -d"'" -f4 | cut -d'-' -f3- | grep iso | cut -d'.' -f1 | sort -u)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="slitaz-rolling-${RELEASE}"
     local URL="http://mirror.slitaz.org/iso/rolling"

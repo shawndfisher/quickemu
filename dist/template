@@ -1,54 +1,59 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="template"
-HOMEPAGE="https://www.template.org"
-INFO="template|Independent|-|https://www.template.org/|This is a quickget/quickemu template file, it's sole purpose is to give details on how to add a new distribution."
-
+# INFO="template|-|https://www.template.org/|This is a quickget/quickemu template file, it's sole purpose is to give details on how to add a new distribution."
+#
 # Function dist_releases
 #
 # This is called from quickget to show all the releases available for a given distribution
-function dist_releases() {
-    # echo 1.0
-}
-
+# function dist_releases() {
+#     echo 1.0
+# }
+#
 # Function dist_editions
 #
 # This is called from quickget to show all the editions available for a given distribution
-function dist_editions() {
-    # echo latest
-}
-
+# function dist_editions() {
+#     echo latest
+# }
+#
 # Function dist_editions
 #
 # This is called from quickget to handle release and edition mismatches
-function dist_validate() {
-    # if [[ ${RELEASE} == x ]] && [[ ${EDITION} == y ]]; then
-    #   echo "Bad release and edition combination
-    #   exit 1
-    # fi
-}
-
-# Function dist_image
+# function dist_validate() {
+#     if [[ ${RELEASE} == x ]] && [[ ${EDITION} == y ]]; then
+#       echo "Bad release and edition combination"
+#       exit 1
+#     fi
+# }
 #
-# This is called from quickget generate the release, edition and hash for a given distribution
+# Function dist_image_pre_get
+#
+# This is called from quickget before the image is downloaded
+# function dist_image_pre_get() {
+#     echo pre_get
+# }
+#
+# Function dist_image_get
+#
+# This is called from quickget to generate the URL, ISO and hash for a given distribution
 # which will be passed to web_get() for downloading
-function dist_image() {
-    # echo "${URL}/${ISO} ${HASH}"
-}
-
+# function dist_image_get() {
+#     echo "${URL}/${ISO} ${HASH}"
+# }
+#
+# Function dist_image_post_get
+#
+# This is called from quickget after the image is downloaded for additional processing
+# function dist_image_post_get() {
+#     unrar / lzma / gzip -d / unzip / blah ${VM_PATH}/${ISO} -op ${VM_PATH}
+#     ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.oldextension')
+# }
+#
 # Function dist_vm_option_tweak
 #
 # This is called from quickget generate the "adjust" config options
-function dist_vm_option_tweak() {
-    # echo "boot=\"legacy\"" >> "${CONF_FILE}"
-}
-
-# Function dist_image_handle
-#
-# This is called from quickget after the image is downloaded for additional processing
-function dist_image_handle() {
-    # unrar / lzma / gzip -d / unzip / blah ${VM_PATH}/${ISO} -op ${VM_PATH}
-    # ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.oldextension')
-}
+# function dist_vm_option_tweak() {
+#     echo "boot=\"legacy\"" >> "${CONF_FILE}"
+# }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

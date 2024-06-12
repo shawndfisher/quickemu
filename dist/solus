@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Solus"
-HOMEPAGE="https://getsol.us/"
-INFO="Solus|Independent|-|https://getsol.us/|Designed for home computing. Every tweak enables us to deliver a cohesive computing experience."
+INFO="Solus|-|https://getsol.us/|Designed for home computing. Every tweak enables us to deliver a cohesive computing experience."
 
 function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://getsol.us/download/" | grep "isos" | grep Download | cut -d'-' -f 2 | sort -ru)
 }
 
 function dist_editions() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://getsol.us/download/" | grep "isos" | grep Download | cut -d'.' -f5 | cut -d'-' -f2- | sort -u)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="Solus-${RELEASE}-${EDITION}.iso"
     local URL="https://downloads.getsol.us/isos/${RELEASE}"

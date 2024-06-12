@@ -24,12 +24,12 @@ function show_os_info() {
 }
 
 function pretty_name() {
-    echo $(show_os_info -1 "${1}")
+    os_info "${1}" | cut -d'|' -f 1
 }
 
 # Just in case quickget want use it
-function os_homepage(){
-    echo $(show_os_info -4 "${1}")
+function os_homepage() {
+    os_info "${1}" | cut -d'|' -f 4
 }
 
 function error_specify_os() {
@@ -49,6 +49,7 @@ function os_supported() {
 }
 
 function error_specify_release() {
+    show_os_info "${OS}"
     echo -e "\nERROR! You must specify a release."
     if [[ $(type -t "dist_releases") == function ]]; then
         echo -en " - Releases:\t"
@@ -62,15 +63,16 @@ function error_specify_release() {
 }
 
 function error_specify_edition() {
+    show_os_info "${OS}"
     echo -e " - Editions:\t$("dist_editions" | fold -s -w "$(tput cols)")"
     echo -e "\nERROR! You must specify an edition."
     exit 1
 }
 
 function error_not_supported_release() {
-    if [[ ! " ${RELEASES[*]} " =~ " ${RELEASE} " ]]; then
+    if [[ ! "${RELEASES[*]}" =~ ${RELEASE} ]]; then
         echo -e "ERROR! ${DISPLAY_NAME} ${RELEASE} is not a supported release.\n"
-        echo -n 'Supported releases: '
+        echo -n ' - Supported releases: '
         "dist_releases"
         exit 1
     fi
@@ -105,8 +107,12 @@ function error_not_supported_argument() {
 }
 
 function validate_release() {
-    local DISPLAY_NAME="$(pretty_name "${OS}")"
-    local RELEASES="$("dist_releases")"
+    local DISPLAY_NAME=""
+    local RELEASES=""
+
+    DISPLAY_NAME="$(pretty_name "${OS}")"
+    RELEASES=$(dist_releases)
+
     if [[ $(type -t "dist_validate") == function ]]; then
         dist_validate
     else
@@ -157,7 +163,7 @@ function csv_data() {
             EDITIONS=$(dist_editions)
         fi
 
-        for RELEASE in $("dist_releases" | sed -Ee 's/eol-\S+//g' ); do # hide eol releases
+        for RELEASE in $(dist_releases | sed -Ee 's/eol-\S+//g' ); do # hide eol releases
             if [[ "${OS}" == *"ubuntu"* ]] && [[ ${RELEASE} == *"daily"*  ]] && [ ${HAS_ZSYNC} -eq 1 ]; then
                 DOWNLOADER="zsync"
             else
@@ -182,6 +188,7 @@ function csv_data() {
     wait
 }
 
+#TODO
 function create_config() {
     local OS="${1}"
     local DESTINATION="${2}"
@@ -234,11 +241,11 @@ function test_all() {
     local URL=""
 
     source $(dirname "$0")/dist/${OS}
-    for RELEASE in $("dist_releases" | sed -Ee 's/eol-\S+//g' ); do # hide eol releases
+    for RELEASE in $(dist_releases | sed -Ee 's/eol-\S+//g' ); do # hide eol releases
         if [[ $(type -t "dist_editions") == function ]]; then
             for EDITION in $("dist_editions"); do
                 validate_release
-                URL=$(dist_image | cut_1 | head -1)
+                URL=$(dist_image_get | cut -d' ' -f1 | head -n 1)
                 if [ "${OPERATION}" == "show" ]; then
                     test_result "${OS}" "${RELEASE}" "${EDITION}" "${URL}"
                 elif [ "${OPERATION}" == "test" ]; then
@@ -248,7 +255,7 @@ function test_all() {
             done
         else
             validate_release
-            URL=$("dist_image" | cut -d' ' -f1 | head -n 1)
+            URL=$(dist_image_get | cut -d' ' -f1 | head -n 1)
             if [ "${OPERATION}" == "show" ]; then
                 test_result "${OS}" "${RELEASE}" "${EDITION}" "${URL}"
             elif [ "${OPERATION}" == "test" ]; then
@@ -353,7 +360,7 @@ function web_get() {
     fi
 
     if [[ ${OS} != windows && ${OS} != macos && ${OS} != windows-server ]]; then
-        echo Downloading $(pretty_name "${OS}") ${RELEASE} ${EDITION:+ $EDITION}
+        echo "Downloading $(pretty_name "${OS}") ${RELEASE} ${EDITION}"
         echo "- URL: ${URL}"
     fi
 
@@ -365,10 +372,11 @@ function web_get() {
 
 # checks if a URL needs to be redirected and returns the final URL
 function web_redirect() {
+    local REDIRECT_URL=""
     local URL="${1}"
     # Check for URL redirections
     # Output to nonexistent directory so the download fails fast
-    local REDIRECT_URL=$(curl --silent --location --fail --write-out %{url_effective} --output /var/cache/${RANDOM}/${RANDOM} "${URL}")
+    REDIRECT_URL=$(curl --silent --location --fail --write-out '%{url_effective}' --output /var/cache/${RANDOM}/${RANDOM} "${URL}")
     if [ "${REDIRECT_URL}" != "${URL}" ]; then
         echo "${REDIRECT_URL}"
     else
@@ -393,13 +401,14 @@ function web_check() {
 }
 
 function zsync_get() {
+    local CHECK=""
     local DIR="${2}"
     local FILE="${1##*/}"
     local OUT=""
     local URL="${1}"
     # Test mode for ISO
     if [ "${OPERATION}" == "show" ]; then
-        echo "${URL}"
+        test_result "${OS}" "${RELEASE}" "${EDITION}" "${URL}"
         exit 0
     elif [ "${OPERATION}" == "test" ]; then
         CHECK=$(web_check "${URL}" && echo "PASS" || echo "FAIL")
@@ -416,7 +425,7 @@ function zsync_get() {
             echo "ERROR! Unable to create directory ${DIR}"
             exit 1
         fi
-        echo -e Downloading $(pretty_name "${OS}") ${RELEASE} ${EDITION+ ${EDITION}} from ${URL}'\n'
+        echo "Downloading $(pretty_name "${OS}") ${RELEASE} ${EDITION} from ${URL}"
         # Only force http for zsync - not earlier because we might fall through here
         if ! zsync "${URL/https/http}.zsync" -i "${DIR}/${OUT}" -o "${DIR}/${OUT}" 2>/dev/null; then
             echo "ERROR! Failed to download ${URL/https/http}.zsync"
@@ -479,7 +488,6 @@ EOF
             dist_vm_option_tweak
         fi
     fi
-
     echo -e "\nTo start your $(pretty_name "${OS}") virtual machine run:"
     if [ "${OS}" == "slint" ]; then
         echo -e "    quickemu --vm ${CONF_FILE}\nTo start Slint with braille support run:\n    quickemu --vm --braille --display sdl ${CONF_FILE}"
@@ -492,6 +500,8 @@ EOF
 }
 
 function open_homepage() {
+    local URL=""
+    local XDG_OPEN=""
     if [ -z "$(os_info "${1}")" ]; then
         error_specify_os
     else
@@ -531,32 +541,29 @@ function create_vm() {
         check_hash "${ISO}" "${HASH}"
     fi
 
-    if [[ $(type -t "dist_image_handle") == function ]]; then
-        dist_image_handle
+    if [[ $(type -t "dist_image_post_get") == function ]]; then
+        dist_image_post_get
     fi
-
     make_vm_config "${ISO}"
 }
 
 function help_message() {
     #shellcheck disable=SC2016
-    printf '                           _              _
-         __ _ _   _ _  ___║ ║ ____ _  ___║ ║_
-        / _` ║ ║ ║ ║ ║/ __║ ║/ / _` ║/ _ \ __║
-       ( (_║ ║ ║_║ ║ ║ (__║   < (_║ ║  __/ ║_      MIT
-        \__, ║\__,_║_║\___║_║\ \__, ║\___║\__║   license
-           ║_║  version: %s ║___/ part of Quickemu project
---------------------------------------------------------------
-         > Quickly create and run optimised Linux, <
-       > Windows and macOS desktop virtual machines. <
-
+    printf '
+             _      _              _
+  __ _ _   _(_) ___| | ____ _  ___| |_
+ / _` | | | | |/ __| |/ / _` |/ _ \ __|
+| (_| | |_| | | (__|   < (_| |  __/ |_
+ \__, |\__,_|_|\___|_|\_\__, |\___|\__|
+    |_|                 |___/ v%s, using curl %s
+--------------------------------------------------------------------------------
  Project - https://github.com/quickemu-project/quickemu
  Discord - https://wimpysworld.io/discord
---------------------------------------------------------------
+--------------------------------------------------------------------------------
 
-Basic Usage:
- quickget <os> <release> [edition]
- quickget ubuntu 22.04
+Usage:
+  quickget <os> <release> [edition]
+  quickget ubuntu 22.04
 
 Advanced usage:
   quickget <arg> [path] <os> [release] [edition]
@@ -577,7 +584,7 @@ Arguments:
   --list-json                              : List everything in json format
 --------------------------------------------------------------------------------
 
-supported Operating Systems:\n' "$(quickemu --version)"
+Supported Operating Systems:\n\n' "$(quickemu --version)" "${CURL_VERSION}"
     os_support | fold -s -w "$(tput cols)"
 }
 
@@ -695,11 +702,11 @@ if [ -n "${2}" ]; then
     fi
 
     validate_release
-    if [[ $(type -t "pre_dist_image") == function ]]; then
-        pre_dist_image
+    if [[ $(type -t "dist_image_pre_get") == function ]]; then
+        dist_image_pre_get
     fi
 
-    create_vm "$("dist_image")"
+    create_vm "$("dist_image_get")"
 else
     error_specify_release
 fi

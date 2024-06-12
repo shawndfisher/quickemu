@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Antix"
-HOMEPAGE="https://antixlinux.com/"
-INFO="Antix|Debian|-|https://antixlinux.com/|Fast, lightweight and easy to install systemd-free linux live CD distribution based on Debian Stable for Intel-AMD x86 compatible systems."
+INFO="Antix|-|https://antixlinux.com/|Fast, lightweight and easy to install systemd-free linux live CD distribution based on Debian Stable for Intel-AMD x86 compatible systems."
 
 function dist_releases() {
     echo 23.1 23 22 21
@@ -12,7 +10,7 @@ function dist_editions() {
     echo net-sysv core-sysv base-sysv full-sysv net-runit core-runit base-runit full-runit
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="antiX-${RELEASE}"
     local README="README"

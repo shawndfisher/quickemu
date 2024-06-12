@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Garuda Linux"
-HOMEPAGE="https://garudalinux.org/"
-INFO="Garuda Linux|Arch|-|https://garudalinux.org/|Feature rich and easy to use Linux distribution."
+INFO="Garuda Linux|-|https://garudalinux.org/|Feature rich and easy to use Linux distribution."
 
 function dist_releases() {
     echo latest
@@ -12,7 +10,7 @@ function dist_editions() {
     echo cinnamon dr460nized dr460nized-gaming gnome i3 kde-git kde-lite lxqt-kwin mate qtile sway wayfire xfce
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://iso.builds.garudalinux.org/iso/latest/garuda"

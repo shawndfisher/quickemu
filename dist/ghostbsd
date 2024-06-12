@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="GhostBSD"
-HOMEPAGE="https://www.ghostbsd.org"
-INFO="GhostBSD|FreeBSD|-|https://www.ghostbsd.org/|Simple, elegant desktop BSD Operating System."
+INFO="GhostBSD|-|https://www.ghostbsd.org/|Simple, elegant desktop BSD Operating System."
 
 GUEST="freebsd"
 
 function dist_releases() {
-    echo $(web_pipe "https://download.ghostbsd.org/releases/amd64/" | grep "href" | cut -d'"' -f2 | cut -d'/' -f1 | sort -r | tail +3 | head -3)
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://download.ghostbsd.org/releases/amd64/" | grep "href" | cut -d'"' -f2 | cut -d'/' -f1 | sort -r | tail -n +3 | head -n 3)
 }
 
 function dist_editions() {
     echo mate xfce
 }
 
-function dist_image() {
+function dist_image_get() {
     local ISO=""
     local URL="https://download.ghostbsd.org/releases/amd64/${RELEASE}"
     local HASH=""

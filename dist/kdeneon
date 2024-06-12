@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="KDE Neon"
-HOMEPAGE="https://neon.kde.org/"
-INFO="KDE Neon|Debian,Ubuntu|-|https://neon.kde.org/|Latest and greatest of KDE community software packaged on a rock-solid base."
+INFO="KDE Neon|-|https://neon.kde.org/|Latest and greatest of KDE community software packaged on a rock-solid base."
 
 function dist_releases() {
     echo user testing unstable developer
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL="https://files.kde.org/neon/images/${RELEASE}/current"

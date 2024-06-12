@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="OpenBSD"
-HOMEPAGE="https://www.openbsd.org"
-INFO="OpenBSD|Independent|-|https://www.openbsd.org/|FREE, multi-platform 4.4BSD-based UNIX-like operating system. Our efforts emphasize portability, standardization, correctness, proactive security and integrated cryptography."
+INFO="OpenBSD|-|https://www.openbsd.org/|FREE, multi-platform 4.4BSD-based UNIX-like operating system. Our efforts emphasize portability, standardization, correctness, proactive security and integrated cryptography."
 
 GUEST="openbsd"
 
 function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://mirror.leaseweb.com/pub/OpenBSD/" | grep -e '6\.[8-9]/' -e '[7-9]\.' | cut -d\" -f4 | tr -d '/' | sort -r)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="install${RELEASE//\./}.iso"
     local URL="https://mirror.leaseweb.com/pub/OpenBSD/${RELEASE}/amd64"

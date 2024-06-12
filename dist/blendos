@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Blendos"
-HOMEPAGE="https://blendos.co/"
-INFO="BlendOS|Arch|-|https://blendos.co/|A seamless blend of all Linux distributions. Allows you to have an immutable, atomic and declarative Arch Linux system, with application support from several Linux distributions & Android."
+INFO="BlendOS|-|https://blendos.co/|A seamless blend of all Linux distributions. Allows you to have an immutable, atomic and declarative Arch Linux system, with application support from several Linux distributions & Android."
 
 function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://mirror.ico277.xyz/blendos/gnome/" | grep "\.iso" | cut -c81- | cut -d'"' -f2 | cut -d'-' -f2)
 }
 
 function dist_editions() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://mirror.ico277.xyz/blendos/" | grep "\[DIR\]" | cut -c81-90 | cut -d'/' -f1 | grep -v testing | sort -u)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="blendos-${RELEASE}-stable-${EDITION}.iso"
     local URL="https://mirror.ico277.xyz/blendos/${EDITION}"

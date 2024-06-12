@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Rocky Linux"
-HOMEPAGE="https://rockylinux.org/"
-INFO="Rocky Linux|RedHat|-|https://rockylinux.org/|Open-source enterprise operating system designed to be 100% bug-for-bug compatible with Red Hat Enterprise Linux®."
+INFO="Rocky Linux|-|https://rockylinux.org/|Open-source enterprise operating system designed to be 100% bug-for-bug compatible with Red Hat Enterprise Linux®."
 
 function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "http://dl.rockylinux.org/vault/rocky/" | grep "^<a href" | grep -v full | grep -v RC | grep -v ISO | cut -d'"' -f2 | tr -d / | sort -ru)
 }
 
@@ -12,7 +11,7 @@ function dist_editions() {
     echo minimal dvd boot
 }
 
-function dist_image() {
+function dist_image_get() {
     if [[ "${RELEASE}" =~ ^8. ]] && [[ "${EDITION}" == "dvd" ]]; then
         EDITION="dvd1"
     fi

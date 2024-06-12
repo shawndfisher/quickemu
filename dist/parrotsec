@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="PeppermintOS"
-HOMEPAGE="https://peppermintos.com/"
-INFO="Parrot Security|Debian|parrot:parrot|https://www.parrotsec.org/|Provides a huge arsenal of tools, utilities and libraries that IT and security professionals can use to test and assess the security of their assets in a reliable, compliant and reproducible way."
+INFO="Parrot Security|parrot:parrot|https://www.parrotsec.org/|Provides a huge arsenal of tools, utilities and libraries that IT and security professionals can use to test and assess the security of their assets in a reliable, compliant and reproducible way."
 
 function dist_releases() {
     echo 6.0 5.3
@@ -12,7 +10,7 @@ function dist_editions() {
     echo home htb security
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL=""

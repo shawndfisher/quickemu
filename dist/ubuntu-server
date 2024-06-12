@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Ubuntu"
-HOMEPAGE="https://ubuntu.com/server"
-INFO="Ubuntu Server|Ubuntu|-|https://ubuntu.com/server|Brings economic and technical scalability to your datacentre, public or private. Whether you want to deploy an OpenStack cloud, a Kubernetes cluster or a 50,000-node render farm, Ubuntu Server delivers the best value scale-out performance available."
+INFO="Ubuntu Server|-|https://ubuntu.com/server|Brings economic and technical scalability to your datacentre, public or private. Whether you want to deploy an OpenStack cloud, a Kubernetes cluster or a 50,000-node render farm, Ubuntu Server delivers the best value scale-out performance available."
 
 function dist_releases() {
+    local ALL_VERSIONS=()
+    # shellcheck disable=SC2207
+    ALL_VERSIONS=($(IFS=$'\n' web_pipe http://releases.ubuntu.com/streams/v1/com.ubuntu.releases:ubuntu-server.json | jq -r '.products[] | select(.arch=="amd64") | .version' | sort -rV))
+    echo daily-live "${ALL_VERSIONS[@]}"
+
     local ALL_VERSIONS=($(IFS=$'\n' web_pipe http://releases.ubuntu.com/streams/v1/com.ubuntu.releases:ubuntu-server.json | jq -r '.products[] | select(.arch=="amd64") | .version' | sort -rV))
     echo ${ALL_VERSIONS[@]}
 
@@ -16,7 +19,7 @@ function dist_releases() {
     fi
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local NAME="live-server"
@@ -41,15 +44,6 @@ function dist_image() {
         ISO=$(cut -d' ' -f3 <<<${DATA})
         HASH=$(cut -d' ' -f1 <<<${DATA})
     fi
-    # if [[ "${RELEASE}" == "daily"* ]] || [ "${RELEASE}" == "dvd" ]; then
-    #     zsync_get "${URL}/${ISO}" "${VM_PATH}" "${OS}-devel.iso"
-    #     make_vm_config "${OS}-devel.iso"
-    # else
-    #     web_get "${URL}/${ISO}" "${VM_PATH}"
-    #     check_hash "${ISO}" "${HASH}"
-    #     make_vm_config "${ISO}"
-    # fi
-
     echo "${URL}/${ISO} ${HASH}"
 }
 
@@ -61,7 +55,6 @@ function dist_vm_option_tweak() {
     if [[ "${RELEASE}" == *"22.04"* ]]; then
         echo "tpm=\"on\"" >> "${CONF_FILE}"
     fi
-
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

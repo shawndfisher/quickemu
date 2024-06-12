@@ -1,51 +1,9 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="macOS"
-HOMEPAGE="https://www.apple.com/macos/"
-INFO="macOS|proprietary|-|https://www.apple.com/macos/|Work and play on your Mac are even more powerful. Elevate your presence on video calls. Access information in all-new ways. Boost gaming performance. And discover even more ways to personalize your Mac."
+INFO="macOS|-|https://www.apple.com/macos/|Work and play on your Mac are even more powerful. Elevate your presence on video calls. Access information in all-new ways. Boost gaming performance. And discover even more ways to personalize your Mac."
 
 GUEST="macos"
 IMAGE_TYPE="img"
-
-#Override
-# function web_get() {
-#     local CHECK=""
-#     local HEADERS=()
-#     local URL="${1}"
-#     local DIR="${2}"
-#     local FILE=""
-#     local USER_AGENT="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-
-#     # if no 3rd parameter, delete everything to late '/' in URL and use as FILE
-#     if [ -n "${3}" ]; then
-#         FILE="${3}"
-#     else
-#         FILE="${URL##*/}"
-#     fi
-
-#     # Process any URL redirections after the file name has been extracted
-#     URL=$(web_redirect "${URL}")
-
-#     # Process any headers
-#     while (( "$#" )); do
-#         if [ "${1}" == "--header" ]; then
-#             HEADERS+=("${1}" "${2}")
-#             shift 2
-#         else
-#             shift
-#         fi
-#     done
-
-#     if [ "${DIR}" != "$(pwd)" ] && ! mkdir -p "${DIR}" 2>/dev/null; then
-#         echo "ERROR! Unable to create directory ${DIR}"
-#         exit 1
-#     fi
-
-#     if ! curl --progress-bar --location --output "${DIR}/${FILE}" --continue-at - --user-agent "${USER_AGENT}" "${HEADERS[@]}" -- "${URL}"; then
-#         echo "ERROR! Failed to download ${URL} with curl."
-#         rm -f "${DIR}/${FILE}"
-#     fi
-# }
 
 function dist_releases() {
     echo high-sierra mojave catalina big-sur monterey ventura sonoma
@@ -61,7 +19,7 @@ function generate_id() {
     echo "${macRecoveryID}"
 }
 
-function dist_image() {
+function dist_image_get() {
     local BOARD_ID=""
     local CWD=""
     local CHUNKCHECK=""
@@ -188,7 +146,7 @@ function dist_vm_option_tweak() {
     fi
 }
 
-function dist_image_handle() {
+function dist_image_post_get() {
     rm "${VM_PATH}/RecoveryImage.img"
     if [ -e "${VM_PATH}/RecoveryImage.dmg" ] && [ ! -e "${VM_PATH}/RecoveryImage.img" ]; then
         # echo "Converting RecoveryImage..."

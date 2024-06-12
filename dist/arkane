@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Arkane Linux"
-HOMEPAGE="https://arkanelinux.org"
-INFO="Arkane Linux|Arch|-|https://arkanelinux.org/|Arkane Linux is an opinionated, immutable, atomic, multi-root Arch-based distibution which aims to provide a GNOME-centered experienced with minimal yet full featured and sensible non-intrusive defaults."
+INFO="Arkane Linux|-|https://arkanelinux.org/|Arkane Linux is an opinionated, immutable, atomic, multi-root Arch-based distibution which aims to provide a GNOME-centered experienced with minimal yet full featured and sensible non-intrusive defaults."
 
 function dist_releases() {
     echo $(web_pipe "https://download.arkanelinux.org/arkane-arkdep/" | grep "<a href=\"arkanelinux-arkdep-" | cut -d"-" -f3 | cut -d"/" -f1 | sort -ru)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL=""
     local ISO=""

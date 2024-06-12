@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="PureOS"
-HOMEPAGE="https://www.pureos.net"
-INFO="PureOS|Debian|-|https://www.pureos.net/|A fully free/libre and open source GNU/Linux operating system, endorsed by the Free Software Foundation."
+INFO="PureOS|-|https://www.pureos.net/|A fully free/libre and open source GNU/Linux operating system, endorsed by the Free Software Foundation."
 
 function dist_releases() {
-    echo "$(web_pipe "https://www.pureos.net/download/" | grep -m 1 "downloads.puri" | cut -d '"' -f 2 | cut -d '-' -f 4)"
+    echo $(web_pipe "https://www.pureos.net/download/" | grep -m 1 "downloads.puri" | cut -d '"' -f 2 | cut -d '-' -f 4)
 }
 
 function dist_editions() {
     echo gnome plasma
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local URL=""

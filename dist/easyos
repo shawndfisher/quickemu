@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="EasyOS"
-HOMEPAGE="https://www.easyos.org"
-INFO="EasyOS|Independent|-|https://easyos.org/|Experimental distribution designed from scratch to support containers."
+INFO="EasyOS|-|https://easyos.org/|Experimental distribution designed from scratch to support containers."
 
 IMAGE_TYPE="img"
 
@@ -17,7 +15,7 @@ function dist_releases() {
     echo 5.8 5.7 5.6.7 5.6.6 5.6.5 5.6.4 5.6.3 5.6.2 5.6.1
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL=""
     local ISO=""
@@ -32,9 +30,11 @@ function dist_image() {
     echo "${URL}/${ISO} ${HASH}"
 }
 
-function dist_image_handle() {
-    qemu-img convert -f raw -O qcow2 "${VM_PATH}/${ISO}" "${VM_PATH}/disk.qcow2"
-    ISO="${ISO/.img/}"
+function dist_image_post_get() {
+    if [[ ${ISO} = *".img"* ]]; then
+        qemu-img convert -f raw -O qcow2 "${VM_PATH}/${ISO}" "${VM_PATH}/disk.qcow2"
+        ISO="${ISO/.img/}"
+    fi
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

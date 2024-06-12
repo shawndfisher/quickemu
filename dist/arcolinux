@@ -1,21 +1,24 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Arco Linux"
-HOMEPAGE="https://www.arcolinux.org"
-INFO="Arco Linux|Arch|-|https://arcolinux.com/|Is all about becoming an expert in linux."
+INFO="Arco Linux|-|https://arcolinux.com/|Is all about becoming an expert in linux."
 
 function dist_releases() {
-    echo $(web_pipe "https://arcolinux.ant.seedhost.eu/arcolinux/iso/" | grep -o -E ">v[[:digit:]]{2}.[[:digit:]]{2}.[[:digit:]]{2}" | sed -e "s/>//" | sort -r | head -n 5)
+    #shellcheck disable=SC2046,SC2005
+    # breaking change in v24.05
+    # v24.05.1 is the first release with the new naming scheme and too complex to parse old and new so just show the new
+    echo $(web_pipe "https://mirror.accum.se/mirror/arcolinux.info/iso/" | grep -o -E -e "v24.0[5-9].[[:digit:]]{2}"  -e "v24.1[0-2].[[:digit:]]{2}" | sort -ru | head -n 5)
 }
 
 function dist_editions() {
-    echo large small
+    echo net plasma pro
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
-    local ISO="arcolinux${EDITION:0:1}-${RELEASE}-x86_64.iso"
-    local URL="https://mirror.accum.se/mirror/arcolinux.info/iso/${RELEASE}"
+    local ISO=""
+    local URL=""
+    URL="https://mirror.accum.se/mirror/arcolinux.info/iso/${RELEASE}"
+    ISO="arco${EDITION}-${RELEASE}-x86_64.iso"
     HASH=$(web_pipe "${URL}/${ISO}.sha1" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }

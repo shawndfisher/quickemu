@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Fedora"
-HOMEPAGE="https://www.fedoraproject.org/"
-INFO="Fedora|Independent|-|https://www.fedoraproject.org/|Innovative platform for hardware, clouds, and containers, built with love by you."
+INFO="Fedora|-|https://www.fedoraproject.org/|Innovative platform for hardware, clouds, and containers, built with love by you."
 
 function dist_releases() {
+    #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://getfedora.org/releases.json" | jq -r 'map(.version) | unique | .[]' | sort -r)
 }
 
 function dist_editions() {
-    echo  $(web_pipe "https://getfedora.org/releases.json" | jq -r 'map(select(.arch=="x86_64" and .variant!="Labs" and .variant!="IoT" and .variant!="Container" and .variant!="Cloud" and .variant!="Everything"  and .subvariant!="Security" and .subvariant!="Server_KVM" and .subvariant!="SoaS")) | map(.subvariant) | unique | .[]')
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://getfedora.org/releases.json" | jq -r 'map(select(.arch=="x86_64" and .variant!="Labs" and .variant!="IoT" and .variant!="Container" and .variant!="Cloud" and .variant!="Everything"  and .subvariant!="Security" and .subvariant!="Server_KVM" and .subvariant!="SoaS")) | map(.subvariant) | unique | .[]')
 }
 
 function dist_validate() {
     if [[ "${RELEASE}" -lt 40 && "${EDITION}" == "Onyx" ]] || [[ "${RELEASE}" -lt 40 && "${EDITION}" == "Sericea" ]]; then
         echo "ERROR! Unsupported combination"
         echo "       Fedora ${RELEASE} ${EDITION} is not available, please choose another Release or Edition"
-        exit 1;
+        exit 1
     fi
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO=""
     local JSON=""
@@ -30,6 +30,7 @@ function dist_image() {
         Server|Kinoite|Onyx|Silverblue|Sericea|Workstation) VARIANT="${EDITION}";;
         *) VARIANT="Spins";;
     esac
+    #shellcheck disable=SC2086
     JSON=$(web_pipe "https://getfedora.org/releases.json" | jq '.[] | select(.variant=="'${VARIANT}'" and .subvariant=="'"${EDITION}"'" and .arch=="x86_64" and .version=="'"${RELEASE}"'")')
     URL=$(echo "${JSON}" | jq -r '.link' | head -n1)
     HASH=$(echo "${JSON}" | jq -r '.sha256' | head -n1)

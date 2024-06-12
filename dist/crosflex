@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="ChromeOS Flex"
-HOMEPAGE="https://chromeenterprise.google/intl/en_uk/os/chromeosflex/"
-INFO="ChromeOS Flex|Independent|-|https://chromeenterprise.google/intl/en_uk/os/chromeosflex/|ChromeOS Flex is a sustainable way to modernise devices that you already own."
+INFO="ChromeOS Flex|-|https://chromeenterprise.google/intl/en_uk/os/chromeosflex/|ChromeOS Flex is a sustainable way to modernise devices that you already own."
 
 GUEST="cros"
 
@@ -10,21 +8,21 @@ function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="${RELEASE}.bin.zip"
     local URL="https://dl.google.com/chromeos-flex/images"
     echo "${URL}/${ISO} ${HASH}"
 }
 
-function dist_vm_option_tweak() {
-    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-}
-
-function dist_image_handle() {
+function dist_image_post_get() {
     unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
     ISO=$(ls ${VM_PATH} | grep -i '.bin' | grep -v 'zip')
     qemu-img create -f qcow2 "${VM_PATH}/disk.qcow2" 16G
+}
+
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

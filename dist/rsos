@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="RSOS"
-HOMEPAGE="https://www.steffes.industries/software"
-INFO="RSOS|Debian|-|https://www.steffes.industries/software|RSOS is a minimalist system. Based on Debian Linux and XFCE, the system offers high performance even on older computers and at the same time impresses with its modern and intuitive design."
+INFO="RSOS|-|https://www.steffes.industries/software|RSOS is a minimalist system. Based on Debian Linux and XFCE, the system offers high performance even on older computers and at the same time impresses with its modern and intuitive design."
 
 function dist_releases() {
     echo latest
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL="https://www.steffes.industries/download_rsos"
     local ISO=""
     echo "${URL}"
 }
 
-function dist_image_handle() {
+function dist_image_post_get() {
     if [ -f "${VM_PATH}/download_rsos" ]; then
         ISO="RSOS-${RELEASE}-amd64.hybrid.iso"
         mv "${VM_PATH}/download_rsos" "${VM_PATH}/${ISO}"

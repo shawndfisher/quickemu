@@ -1,23 +1,16 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Guix"
-HOMEPAGE="https://guix.gnu.org/"
-INFO="Guix|Independent|-|https://guix.gnu.org/|Distribution of the GNU operating system developed by the GNU Project—which respects the freedom of computer users."
+INFO="Guix|-|https://guix.gnu.org/|Distribution of the GNU operating system developed by the GNU Project—which respects the freedom of computer users."
 
 function dist_releases() {
     echo 1.4.0 1.3.0
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="guix-system-install-${RELEASE}.x86_64-linux.iso"
     local URL="https://ftpmirror.gnu.org/gnu/guix"
     echo "${URL}/${ISO} ${HASH}"
-}
-
-function dist_image_handle() {
-    echo
-    #cp ${VM_PATH}/${ISO} ${VM_PATH}/disc.qcow2
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

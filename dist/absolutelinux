@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Absolute Linux"
-HOMEPAGE="https://absolutelinux.org/"
-INFO="Absolute Linux|Slackware|-|https://absolutelinux.org/|Absolute is a 64-bit Linux distribution based upon Slackware."
+INFO="Absolute Linux|-|https://absolutelinux.org/|Absolute is a 64-bit Linux distribution based upon Slackware."
 
 function dist_releases() {
     echo 20220825
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL="https://sourceforge.net/projects/absolute-linux/files/Absolute64_LIVE"
     local ISO="AbsoluteLive-${RELEASE}.zip"
     echo "${URL}/${ISO} ${HASH}"
 }
 
-function dist_image_handle() {
+function dist_image_post_get() {
     unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
     ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.zip')
 }

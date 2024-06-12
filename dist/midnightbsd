@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="MidnightBSD"
-HOMEPAGE="https://www.midnightbsd.org/"
+INFO="MidnightBSD|-|https://www.midnightbsd.org/|MidnightBSD is a BSD-derived operating system developed with desktop users in mind."
 
 GUEST="midnightbsd"
 
@@ -9,15 +8,15 @@ function dist_releases() {
     echo $(web_pipe "https://midnightbsd.org/ftp/MidnightBSD/releases/amd64/" | grep "<a href=\"[23].[012]\." | cut -d"\"" -f2 | cut -d"/" -f1 | sort -ru)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local URL="http://ns3.foolishgames.net/ftp/pub/MidnightBSD/releases/amd64/ISO-IMAGES/${RELEASE}"
     local ISO="MidnightBSD-${RELEASE}--amd64-disc1.iso"
     echo "${URL}/${ISO} ${HASH}"
 }
 
-# function dist_vm_option_tweak() {
-#     echo "boot=\"legacy\"" >> "${CONF_FILE}"
-# }
+function dist_vm_option_tweak() {
+    echo "boot=\"legacy\"" >> "${CONF_FILE}"
+}
 
 # vim:tabstop=4:shiftwidth=4:expandtab

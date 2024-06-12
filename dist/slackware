@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-PRETTY_NAME="Slackware"
-HOMEPAGE="https://www.slackware.com"
-INFO="Slackware|Independent|-|http://www.slackware.com/|Advanced Linux operating system, designed with the twin goals of ease of use and stability as top priorities."
+INFO="Slackware|-|http://www.slackware.com/|Advanced Linux operating system, designed with the twin goals of ease of use and stability as top priorities."
 
 function dist_releases() {
-    echo $(web_pipe "https://slackware.nl/slackware/slackware-iso/" | grep "slackware-" | cut -d'<' -f7 | cut -d'-' -f2 | sort -ru | head -5)
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://slackware.nl/slackware/slackware-iso/" | grep "slackware-" | cut -d'<' -f7 | cut -d'-' -f2 | sort -ru | head -n 5)
 }
 
-function dist_image() {
+function dist_image_get() {
     local HASH=""
     local ISO="slackware64-${RELEASE}-install-dvd.iso"
     local URL="https://slackware.nl/slackware/slackware-iso/slackware64-${RELEASE}-iso"
