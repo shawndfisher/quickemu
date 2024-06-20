@@ -109,10 +109,8 @@ function error_not_supported_argument() {
 function validate_release() {
     local DISPLAY_NAME=""
     local RELEASES=""
-
     DISPLAY_NAME="$(pretty_name "${OS}")"
     RELEASES=$(dist_releases)
-
     if [[ $(type -t "dist_validate") == function ]]; then
         dist_validate
     else
@@ -188,22 +186,49 @@ function csv_data() {
     wait
 }
 
-#TODO
 function create_config() {
-    local OS="${1}"
-    local DESTINATION="${2}"
-    local USE
-
-    if [[ "${DESTINATION}" == "http://"* ]] || [[ "${DESTINATION}" == "https://"* ]]; then
-        web_get "${DESTINATION}" "${OS}"
-        echo "#TODO: create config!"
-    elif [[ "${DESTINATION}" == "/"* ]]; then
-        cp "${OS}" "${DESTINATION}"/
-        echo "#TODO: create config!"
-    else
-        echo "You forget write full path?" && exit 1
+    local VM_PATH="${1}"
+    local INPUT="${2}"
+    OS="custom"
+    if ! mkdir "${VM_PATH}" 2>/dev/null; then
+        echo "ERROR! Could not create directory: ${VM_PATH}. Please verify that it does not already exist"
+        exit 1
     fi
-    exit 0
+    if [[ "${INPUT}" == "http://"* ]] || [[ "${INPUT}" == "https://"* ]]; then
+        INPUT="$(web_redirect "${INPUT}")"
+        if [[ "${INPUT}" == *".iso" ]] || [[ "${INPUT}" == *".img" ]]; then
+            web_get "${INPUT}" "${VM_PATH}"
+            INPUT="${VM_PATH}/${INPUT##*/}"
+        else
+            echo "ERROR! Only ISO,IMG and QCOW2 file types are supported for --create-config"
+            exit 1
+        fi
+    fi
+    if [[ "${INPUT}" == *".iso" ]]; then
+        echo "Moving image to VM dir" && mv "${INPUT}" "${VM_PATH}"
+        IMAGE_TYPE="iso"
+    elif [[ "${INPUT}" == *".img" ]]; then
+        echo "Moving image to VM dir" && mv "${INPUT}" "${VM_PATH}"
+        IMAGE_TYPE="img"
+    elif [[ "${INPUT}" == *".qcow2" ]]; then
+        echo "Moving image to VM dir" && mv "${INPUT}" "${VM_PATH}/disk.qcow2"
+        IMAGE_TYPE="qcow2"
+    else
+        echo "ERROR! Only ISO,IMG and QCOW2 file types are supported for --create-config"
+        exit 1
+    fi
+    echo "Creating custom VM config for ${INPUT##*/}."
+    case "${INPUT,,}" in
+        *windows-server*) CUSTOM_OS="windows-server";;
+        *windows*) CUSTOM_OS="windows";;
+        *freebsd*) CUSTOM_OS="freebsd";;
+        *kolibrios*) CUSTOM_OS="kolibrios";;
+        *reactos*) CUSTOM_OS="reactos";;
+        *) CUSTOM_OS="linux";;
+    esac
+    echo "Selecting OS: ${CUSTOM_OS}. If this is incorrect, please modify the config file to include the correct OS."
+    echo
+    make_vm_config "${INPUT}"
 }
 
 function list_supported() {
@@ -464,10 +489,7 @@ function make_vm_config() {
         IMAGE_TYPE="iso"
     fi
 
-    CONF_FILE="${OS}-${RELEASE}.conf"
-    if [ -n "${EDITION}" ]; then
-        CONF_FILE="${OS}-${RELEASE}-${EDITION}.conf"
-    fi
+    CONF_FILE="${VM_PATH}.conf"
 
     if [ ! -e "${CONF_FILE}" ]; then
         echo "Making ${CONF_FILE}"
