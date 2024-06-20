@@ -748,7 +748,7 @@ function configure_os_quirks() {
                       GUEST_TWEAKS+=" -global nec-usb-xhci.msi=off"
                   fi
                   ;;
-        fiwix|essebcereactos) NET_DEVICE="e1000"
+        fiwix|essence|reactos) NET_DEVICE="e1000"
                  keyboard="ps2";;
         macos)
             # Tune QEMU optimisations based on the macOS release, or fallback to lowest
