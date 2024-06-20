@@ -16,9 +16,11 @@ function dist_image_get() {
 }
 
 function dist_image_post_get() {
-    unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
-    ISO=$(ls ${VM_PATH} | grep -i '.bin' | grep -v 'zip')
-    qemu-img create -f qcow2 "${VM_PATH}/disk.qcow2" 16G
+    if [[ ${ISO} = *".zip"* ]]; then
+        unzip ${VM_PATH}/${ISO} -d ${VM_PATH}
+        rm -f "${VM_PATH}/${ISO}"
+        ISO="$(ls -1 "${VM_PATH}/"*.bin | cut -d'/' -f2)"
+    fi
 }
 
 function dist_vm_option_tweak() {

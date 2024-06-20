@@ -17,8 +17,11 @@ function dist_image_get() {
 }
 
 function dist_image_post_get() {
-    unrar x -ep ${VM_PATH}/${ISO} -op ${VM_PATH}
-    ISO=$(ls ${VM_PATH} | grep -i '.iso' | grep -v '.rar')
+    if [[ ${ISO} = *".rar"* ]]; then
+        unrar x -ep ${VM_PATH}/${ISO} -op ${VM_PATH}
+        rm -f "${VM_PATH}/${ISO}"
+        ISO="$(ls -1 "${VM_PATH}/"*.iso | cut -d'/' -f2)"
+    fi
 }
 
 function dist_vm_option_tweak() {

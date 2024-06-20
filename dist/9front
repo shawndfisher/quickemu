@@ -20,8 +20,10 @@ function dist_image_get() {
 }
 
 function dist_image_post_get() {
-    gzip -d ${VM_PATH}/${ISO}
-    ISO="${ISO/.gz/}"
+    if [[ ${ISO} = *".gz"* ]]; then
+        gzip -d ${VM_PATH}/${ISO}
+        ISO="${ISO/.gz/}"
+    fi
 }
 
 # vim:tabstop=4:shiftwidth=4:expandtab

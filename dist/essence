@@ -18,11 +18,12 @@ function dist_image_get() {
 }
 
 function dist_image_post_get() {
-    tar --strip-components=1 -xJf ${VM_PATH}/${ISO} -C ${VM_PATH}
-    qemu-img create -f qcow2 "${VM_PATH}/disk.qcow2" 1G
-    rm -f "${VM_PATH}/Essence.ova" "${VM_PATH}/Essence.tar.xz"
-    mv "${VM_PATH}/drive" "${VM_PATH}/essence.img"
-    ISO="essence.img"
+    if [[ ${ISO} = *".tar.xz"* ]]; then
+        tar --strip-components=1 -xJf ${VM_PATH}/${ISO} -C ${VM_PATH}
+        rm -f "${VM_PATH}/Essence.ova" "${VM_PATH}/Essence.tar.xz"
+        mv "${VM_PATH}/drive" "${VM_PATH}/essence.img"
+        ISO="$(ls -1 "${VM_PATH}/"*.img | cut -d'/' -f2)"
+    fi
 }
 
 function dist_vm_option_tweak() {
