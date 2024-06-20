@@ -15,10 +15,6 @@ function dist_image_get() {
     echo "${URL}/${ISO} ${HASH}"
 }
 
-function dist_image_post_get() {
-    qemu-img create -f qcow2 "${VM_PATH}/disk.qcow2" 1G
-}
-
 function dist_vm_option_tweak() {
     echo "boot=\"legacy\"" >> "${CONF_FILE}"
 }
