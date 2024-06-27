@@ -3,7 +3,9 @@
 INFO="NixOS|-|https://nixos.org/|Linux distribution based on Nix package manager, tool that takes a unique approach to package management and system configuration."
 
 function dist_releases() {
-    echo unstable 23.11 23.05 22.11 22.05 21.11 21.05
+    # Lists unstable plus the two most recent releases
+    #shellcheck disable=SC2046
+    echo unstable $(web_pipe "https://nix-channels.s3.amazonaws.com/?delimiter=/" | grep -o -P '(?<=<Key>nixos-)[0-9]+.[0-9]+(?=</Key>)' | sort -nr | head -n +2)
 }
 
 function dist_editions() {
@@ -12,6 +14,16 @@ function dist_editions() {
 
 function dist_image_get() {
     local HASH=""
+    # Adapt the plasma edition according to the NixOS release
+    case "${EDITION}" in
+        plasma)
+            if [ "${RELEASE}" == "23.11" ]; then
+                EDITION+="5"
+            else
+                EDITION+="6"
+            fi
+            ;;
+    esac
     local ISO="latest-nixos-${EDITION}-x86_64-linux.iso"
     local URL="https://channels.nixos.org/nixos-${RELEASE}"
     HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f1)

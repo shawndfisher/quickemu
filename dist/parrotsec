@@ -3,7 +3,8 @@
 INFO="Parrot Security|parrot:parrot|https://www.parrotsec.org/|Provides a huge arsenal of tools, utilities and libraries that IT and security professionals can use to test and assess the security of their assets in a reliable, compliant and reproducible way."
 
 function dist_releases() {
-    echo 6.0 5.3
+    #shellcheck disable=SC2046,SC2005
+    echo $(web_pipe "https://download.parrot.sh/parrot/iso/" | grep -o -P '(?<=href=")[0-9].*(?=/")' | sort -nr | head -n 1)
 }
 
 function dist_editions() {
