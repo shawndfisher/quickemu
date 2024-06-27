@@ -79,7 +79,7 @@ function error_not_supported_release() {
 }
 
 function error_not_supported_edition() {
-    if [[ ! "${EDITIONS[*]}" =~ ${EDITION} ]]; then
+    if [[ ! "${EDITIONS[*]}" = *"${EDITION}"* ]]; then
         echo -e "ERROR! ${EDITION} is not a supported $(pretty_name "${OS}") edition\n"
         echo -n ' - Supported editions: '
         for EDITION in "${EDITIONS[@]}"; do
@@ -265,9 +265,11 @@ function test_all() {
     local CHECK=""
     local URL=""
 
-    source $(dirname "$0")/dist/${OS}
     for RELEASE in $(dist_releases | sed -Ee 's/eol-\S+//g' ); do # hide eol releases
-        if [[ $(type -t "dist_editions") == function ]]; then
+        if [[ $(type -t "dist_image_test") == function ]]; then
+            URL=$(dist_image_get | cut -d' ' -f1 | head -n 1)
+            dist_image_test ${RELEASE}
+        elif [[ $(type -t "dist_editions") == function ]]; then
             for EDITION in $("dist_editions"); do
                 validate_release
                 URL=$(dist_image_get | cut -d' ' -f1 | head -n 1)
@@ -550,11 +552,13 @@ function create_vm() {
     # echo "create_vm ISO ${ISO}"   >&2
     # echo "create_vm HASH ${HASH}" >&2
 
-    if [[ $URL == *"drive.usercontent.google.com"* ]] || [[ $URL == *"microsoft.com"* ]]; then
+    if [[ $URL == *"drive.usercontent.google.com"* ]] || [[ $URL == *"microsoft.com"* ]] || [[ $URL == *"oscdn.apple.com"* ]]; then
         local FILE="${URL##*/}"
         URL="${URL%/${FILE}}"
         ISO=${FILE}
-        web_get "${URL}" "${VM_PATH}" "${FILE}"
+        if [[ ! $URL == *"oscdn.apple.com"* ]]; then
+            web_get "${URL}" "${VM_PATH}" "${FILE}"
+        fi
     else
         web_get "${URL}" "${VM_PATH}"
     fi
@@ -651,10 +655,14 @@ case "${1}" in
         shift
         if [ -z "${1}" ]; then
             for OS in $(os_support); do
+                source "$(dirname "$0")/dist/${OS}"
                 show_os_info "${OS}"
             done
         else
-            show_os_info "${1}"
+            if [ -e "$(dirname "$0")/dist/${1}" ]; then
+                source "$(dirname "$0")/dist/${1}"
+                show_os_info "${1}"
+            fi
         fi
         exit 0;;
     --version|-version)
@@ -669,10 +677,12 @@ case "${1}" in
         shift
         if [ -z "${1}" ]; then
             for OS in $(os_support); do
+                source "$(dirname "$0")/dist/${OS}"
                 (test_all "${OS}")
             done
             exit 0
         elif [ -z "${2}" ]; then
+            source "$(dirname "$0")/dist/${1}"
             test_all "${1}"
             exit 0
         fi;;
@@ -681,10 +691,12 @@ case "${1}" in
         shift
         if [ -z "${1}" ]; then
             for OS in $(os_support); do
+                source "$(dirname "$0")/dist/${OS}"
                 (test_all "${OS}")
             done
             exit 0
         elif [ -z "${2}" ]; then
+            source "$(dirname "$0")/dist/${1}"
             test_all "${1}"
             exit 0
         fi;;
@@ -724,11 +736,19 @@ if [ -n "${2}" ]; then
     fi
 
     validate_release
-    if [[ $(type -t "dist_image_pre_get") == function ]]; then
-        dist_image_pre_get
+    if [ ! -z "${OPERATION}" ]; then
+        if [[ $(type -t "dist_image_test") == function ]]; then
+            dist_image_test
+            exit 0
+        fi
+    else
+        if [[ $(type -t "dist_image_pre_get") == function ]]; then
+            dist_image_pre_get
+        fi
     fi
 
-    create_vm "$("dist_image_get")"
+    DIST_URL="$(dist_image_get)"
+    create_vm "${DIST_URL}"
 else
     error_specify_release
 fi
